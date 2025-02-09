@@ -15,8 +15,8 @@ public class JwtValidationHandler(JwtOptions jwtOptions) : JwtSecurityTokenHandl
         validationParameters.ValidateIssuer = true;
         validationParameters.ValidateAudience = true;
         validationParameters.ValidateIssuerSigningKey = true;
-        validationParameters.ValidIssuer = JwtConstants.DEFAULT_JWT_KEY_ISSUER_AUDIENCE;
-        validationParameters.ValidAudience = JwtConstants.DEFAULT_JWT_KEY_ISSUER_AUDIENCE;
+        validationParameters.ValidIssuer = JwtConstants.DefaultJwtKeyIssuerAudience;
+        validationParameters.ValidAudience = JwtConstants.DefaultJwtKeyIssuerAudience;
         validationParameters.ValidateLifetime = true;
         validationParameters.ClockSkew = TimeSpan.Zero;
         validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtOptions.Secret));

@@ -2,5 +2,5 @@ namespace DealUp.Constants;
 
 public static class ProjectConstants
 {
-    public const string Name = "Abobius";
+    public const string Name = "DealUp";
 }

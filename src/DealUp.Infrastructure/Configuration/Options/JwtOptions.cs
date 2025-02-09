@@ -6,8 +6,8 @@ public class JwtOptions
 {
     public static string Section = "Jwt";
     
-    public string Issuer { get; set; } = JwtConstants.DEFAULT_JWT_KEY_ISSUER_AUDIENCE;
-    public string Audience { get; set; } = JwtConstants.DEFAULT_JWT_KEY_ISSUER_AUDIENCE;
+    public string Issuer { get; set; } = JwtConstants.DefaultJwtKeyIssuerAudience;
+    public string Audience { get; set; } = JwtConstants.DefaultJwtKeyIssuerAudience;
     public int MinutesToExpire { get; set; } = 30;
     public required string Secret { get; set; }
 }
