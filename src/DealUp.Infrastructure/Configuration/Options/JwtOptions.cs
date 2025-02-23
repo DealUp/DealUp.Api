@@ -4,8 +4,8 @@ namespace DealUp.Infrastructure.Configuration.Options;
 
 public class JwtOptions
 {
-    public static string Section = "Jwt";
-    
+    public const string SectionName = "JwtOptions";
+
     public string Issuer { get; set; } = JwtConstants.DefaultJwtKeyIssuerAudience;
     public string Audience { get; set; } = JwtConstants.DefaultJwtKeyIssuerAudience;
     public int MinutesToExpire { get; set; } = 30;

@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DealUp.Database\DealUp.Database.csproj" />
       <ProjectReference Include="..\DealUp.Domain\DealUp.Domain.csproj" />
       <ProjectReference Include="..\DealUp.Dto\DealUp.Dto.csproj" />
       <ProjectReference Include="..\DealUp.Infrastructure\DealUp.Infrastructure.csproj" />
