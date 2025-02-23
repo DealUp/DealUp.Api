@@ -1,0 +1,27 @@
+﻿volumes:
+  postgresql-data:
+
+services:
+  dealup.api:
+    image: zvesdochyot/dealup-api:latest
+    container_name: dealup-api
+    restart: always
+    ports:
+    - "8080:8080"
+    environment:
+    - ASPNETCORE_HTTP_PORTS=8080
+    - Logging:LogLevel:Default=Information
+    - Logging:LogLevel:Microsoft.AspNetCore=Information
+
+  postgresql:
+    image: postgres:17.4
+    container_name: postgresql
+    restart: always
+    ports:
+    - "5432:5432"
+    environment:
+    - POSTGRES_USER=
+    - POSTGRES_PASSWORD=
+    - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+    - postgresql-data:/var/lib/postgresql/data
