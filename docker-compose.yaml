@@ -15,6 +15,9 @@ services:
       DatabaseOptions:ConnectionString: Host=postgresql;Port=5432;Database=dealup_dev;Username=dealup;Password=dealup123;
       JwtOptions:Secret: 9713d38a-8829-4c39-94b8-392321a6cd36
       JwtOptions:MinutesToExpire: 1440
+    depends_on:
+      postgresql:
+        condition: service_healthy
 
   postgresql:
     image: postgres:17.4
@@ -28,3 +31,8 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
     - postgresql-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
