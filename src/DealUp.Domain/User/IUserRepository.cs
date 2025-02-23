@@ -2,5 +2,6 @@ namespace DealUp.Domain.User;
 
 public interface IUserRepository
 {
-    Task<User> GetUserAsync(string username);
+    public Task<User?> GetUserAsync(string userEmail);
+    public Task SaveUserAsync(User user);
 }

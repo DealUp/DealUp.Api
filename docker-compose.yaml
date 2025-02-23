@@ -9,9 +9,12 @@ services:
     ports:
     - "8080:8080"
     environment:
-    - ASPNETCORE_HTTP_PORTS=8080
-    - Logging:LogLevel:Default=Information
-    - Logging:LogLevel:Microsoft.AspNetCore=Information
+      ASPNETCORE_HTTP_PORTS: 8080
+      Logging:LogLevel:Default: Information
+      Logging:LogLevel:Microsoft.AspNetCore: Information
+      DatabaseOptions:ConnectionString: Host=postgresql;Port=5432;Database=dealup_dev;Username=dealup;Password=dealup123;
+      JwtOptions:Secret: 9713d38a-8829-4c39-94b8-392321a6cd36
+      JwtOptions:MinutesToExpire: 1440
 
   postgresql:
     image: postgres:17.4
@@ -20,8 +23,8 @@ services:
     ports:
     - "5432:5432"
     environment:
-    - POSTGRES_USER=dealup
-    - POSTGRES_PASSWORD=dealup123
-    - PGDATA=/var/lib/postgresql/data/pgdata
+      POSTGRES_USER: dealup
+      POSTGRES_PASSWORD: dealup123
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
     - postgresql-data:/var/lib/postgresql/data

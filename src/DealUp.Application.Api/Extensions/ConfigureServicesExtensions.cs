@@ -1,6 +1,7 @@
+using DealUp.Database.Repositories;
+using DealUp.Database.Repositories.User;
 using DealUp.Domain.Auth.Interfaces;
 using DealUp.Domain.User;
-using DealUp.Infrastructure;
 using DealUp.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -22,9 +23,8 @@ public static class ConfigureServicesExtensions
 
     public static IServiceCollection ConfigureServices(this IServiceCollection services)
     {
-        services.AddTransient<IAuthService, AuthService>();
-        services.AddTransient<IUserRepository, UserRepository>();
-
-        return services;
+        return services
+            .AddTransient<IAuthService, AuthService>()
+            .AddTransient<IUserRepository, UserRepository>();
     }
 }

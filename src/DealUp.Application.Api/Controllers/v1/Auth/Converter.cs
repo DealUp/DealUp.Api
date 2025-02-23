@@ -2,9 +2,9 @@ using DealUp.Domain.Auth;
 using DealUp.Dto.v1.Auth;
 using DealUp.Utils;
 
-namespace DealUp.Application.Api.Controllers.v1;
+namespace DealUp.Application.Api.Controllers.v1.Auth;
 
-public static class DtoConverter
+public static class Converter
 {
     public static JwtTokenDto ToDto(this JwtToken token)
     {
