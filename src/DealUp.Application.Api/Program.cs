@@ -1,4 +1,5 @@
 using DealUp.Application.Api.Extensions;
+using DealUp.Constants;
 using DealUp.Database.Extensions;
 using DealUp.Infrastructure.Configuration.Extensions;
 using DealUp.Infrastructure.Configuration.Middlewares;
@@ -16,6 +17,14 @@ builder.AddPostgresqlDatabase();
 builder.AddAuthentication();
 builder.AddAuthorization();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CorsPoliciesConstants.ALLOW_ALL, policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -28,6 +37,9 @@ app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+app.UseCors(CorsPoliciesConstants.ALLOW_ALL);
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
