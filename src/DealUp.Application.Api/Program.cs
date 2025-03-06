@@ -1,5 +1,4 @@
 using DealUp.Application.Api.Extensions;
-using DealUp.Constants;
 using DealUp.Database.Extensions;
 using DealUp.Infrastructure.Configuration.Extensions;
 using DealUp.Infrastructure.Configuration.Middlewares;
@@ -19,32 +18,34 @@ builder.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(CorsPoliciesConstants.ALLOW_ALL, policy =>
+    options.AddDefaultPolicy(policyBuilder =>
     {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
+app.UseHttpsRedirection();
+app.UseRouting();
+
+app.UseCors();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.UseHttpsRedirection();
-app.UseMiddleware<ExceptionHandlerMiddleware>();
-
-app.UseCors(CorsPoliciesConstants.ALLOW_ALL);
-
-app.UseSwagger();
-app.UseSwaggerUI();
+app.MapGet("/health", context => context.Response.WriteAsync("Alive!"));
 app.MapControllers();
-
-app.MapGet("api/health", context => context.Response.WriteAsync("Alive!"));
 
 await app.ExecuteMigrationsAsync();
 
