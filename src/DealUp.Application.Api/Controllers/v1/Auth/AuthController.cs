@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using DealUp.Domain.Auth.Interfaces;
+using DealUp.Domain.Identity.Interfaces;
 using DealUp.Dto.v1.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace DealUp.Application.Api.Controllers.v1.Auth;
 
 [ApiController]
-[Route("auth")]
-public class AuthController(IAuthService authService) : ControllerBase
+[Route("api/v1/auth")]
+public class AuthController(IAuthService authService, IHttpContextService httpContextService) : ControllerBase
 {
     [AllowAnonymous]
     [HttpPost("register")]
@@ -30,6 +30,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     [HttpGet("test")]
     public ActionResult TestAuth()
     {
-        return new JsonResult(new { Message = "Welcome!" });
+        var userId = httpContextService.GetUserIdOrThrow();
+        return new JsonResult(new { Message = "Welcome!", UserId = userId });
     }
 }

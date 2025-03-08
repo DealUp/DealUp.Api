@@ -1,16 +1,13 @@
 using DealUp.Application.Api.Extensions;
 using DealUp.Database.Extensions;
 using DealUp.Infrastructure.Configuration.Extensions;
-using DealUp.Infrastructure.Configuration.Middlewares;
-using DealUp.Infrastructure.Configuration.Options;
+using DealUp.Infrastructure.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
-
 builder.Services.AddControllers().SetCamelCaseResponse();
 builder.Services.AddSwagger();
-builder.Services.ConfigureServices();
+builder.Services.ConfigureServices(builder.Configuration);
 builder.AddPostgresqlDatabase();
 
 builder.AddAuthentication();
@@ -51,6 +48,9 @@ if (app.Environment.IsDevelopment())
 app.MapGet("/health", context => context.Response.WriteAsync("Alive!"));
 app.MapControllers();
 
-//await app.ExecuteMigrationsAsync();
+if (app.Environment.IsProduction())
+{
+    await app.ExecuteMigrationsAsync();
+}
 
 await app.RunAsync();

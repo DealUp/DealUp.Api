@@ -12,4 +12,7 @@ public class User : EntityBase
 
     [MaxLength(64)]
     public string? Password { get; set; }
+
+    [MaxLength(64)]
+    public required string Status { get; set; }
 }

@@ -10,12 +10,14 @@ public static class Converter
     {
         return new JwtTokenDto
         {
-            AccessToken = token.Value
+            Type = token.Type,
+            AccessToken = token.AccessToken,
+            ExpiresIn = token.ExpiresIn
         };
     }
 
     public static Credentials ToDomain(this CredentialsDto credentialsDto)
     {
-        return new Credentials(credentialsDto.Username, credentialsDto.Password.ToSha256());
+        return new Credentials(credentialsDto.Email, credentialsDto.Password.ToSha256());
     }
 }
