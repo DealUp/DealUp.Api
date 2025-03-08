@@ -20,7 +20,11 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policyBuilder =>
     {
-        policyBuilder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        policyBuilder.SetIsOriginAllowed(origin =>
+        {
+            var host = new Uri(origin).Host;
+            return host == "localhost" || host == "127.0.0.1";
+        }).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
     });
 });
 
@@ -47,6 +51,6 @@ if (app.Environment.IsDevelopment())
 app.MapGet("/health", context => context.Response.WriteAsync("Alive!"));
 app.MapControllers();
 
-await app.ExecuteMigrationsAsync();
+//await app.ExecuteMigrationsAsync();
 
 await app.RunAsync();
