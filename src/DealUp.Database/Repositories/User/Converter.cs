@@ -9,7 +9,7 @@ public static class Converter
 {
     public static UserDomain ToDomain(this Dal.User user)
     {
-        return new UserDomain(user.Id, user.Email, user.Password, user.Status.ToEnum<Status>());
+        return new UserDomain(user.Id, user.Username, user.Password, user.Status.ToEnum<UserVerificationStatus>());
     }
 
     public static Dal.User ToDal(this UserDomain user)
@@ -17,7 +17,7 @@ public static class Converter
         return new Dal.User
         {
             Id = user.Id,
-            Email = user.Email,
+            Username = user.Username,
             Password = user.Password,
             Status = user.Status.ToString()
         };

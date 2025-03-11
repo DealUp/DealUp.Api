@@ -2,26 +2,26 @@ using DealUp.Domain.Auth;
 
 namespace DealUp.Domain.User;
 
-public class User(Guid? id, string email, string? password, Status status) : Entity(id)
+public class User(Guid? id, string username, string? password, UserVerificationStatus status) : Entity(id)
 {
-    public string Email { get; private set; } = email;
+    public string Username { get; private set; } = username;
     public string? Password { get; private set; } = password;
-    public Status Status { get; private set; } = status;
+    public UserVerificationStatus Status { get; private set; } = status;
 
-    private User(string email, string password, Status status) : this(Guid.CreateVersion7(), email, password, status) { }
+    private User(string username, string password, UserVerificationStatus status) : this(Guid.CreateVersion7(), username, password, status) { }
 
     public bool IsMatchingPassword(Credentials credentials)
     {
         return Password == credentials.Password;
     }
 
-    public static User CreateNew(string email, string password)
+    public static User CreateNew(string username, string password)
     {
-        return new User(email, password, Status.Unverified);
+        return new User(username, password, UserVerificationStatus.Unverified);
     }
 }
 
-public enum Status
+public enum UserVerificationStatus
 {
     Unverified = 1,
     Confirmed

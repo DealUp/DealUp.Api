@@ -13,7 +13,7 @@ namespace DealUp.Application.Api.Controllers.v1.User;
 public class UserController(IHttpContextService httpContextService, IUserService userService) : ControllerBase
 {
     [Authorize]
-    [AuthorizeFor(Status.Unverified)]
+    [AuthorizeFor(UserVerificationStatus.Unverified)]
     [HttpGet("start-email-verification")]
     public async Task<ActionResult<StartVerificationResponseDto>> StartEmailVerification()
     {

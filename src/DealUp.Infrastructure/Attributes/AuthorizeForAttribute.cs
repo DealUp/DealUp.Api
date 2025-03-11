@@ -6,7 +6,7 @@ namespace DealUp.Infrastructure.Attributes;
 
 public class AuthorizeForAttribute : TypeFilterAttribute
 {
-    public AuthorizeForAttribute(params Status[] allowedStatuses) : base(typeof(UserStatusAuthorizationFilter))
+    public AuthorizeForAttribute(params UserVerificationStatus[] allowedStatuses) : base(typeof(UserStatusAuthorizationFilter))
     {
         Arguments = [allowedStatuses];
     }

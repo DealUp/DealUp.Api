@@ -17,21 +17,21 @@ public class UserRepository(DatabaseContext databaseContext) : IUserRepository
         return user?.ToDomain();
     }
 
-    public async Task<UserDomain?> GetUserByEmailAsync(string userEmail)
+    public async Task<UserDomain?> GetUserByUsernameAsync(string username)
     {
         var user = await databaseContext.Set<Dal.User>()
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Email == userEmail);
+            .FirstOrDefaultAsync(x => x.Username == username);
 
         return user?.ToDomain();
     }
 
-    public Task SetUserStatusAsync(Guid userId, Status status)
+    public Task SetUserStatusAsync(Guid userId, UserVerificationStatus userVerificationStatus)
     {
         return databaseContext.Set<Dal.User>()
             .AsNoTracking()
             .Where(user => user.Id == userId)
-            .ExecuteUpdateAsync(setter => setter.SetProperty(x => x.Status, status.ToString()));
+            .ExecuteUpdateAsync(setter => setter.SetProperty(x => x.Status, userVerificationStatus.ToString()));
     }
 
     public Task<bool> IsPendingConfirmationExistsAsync(Guid userId, ConfirmationType type)

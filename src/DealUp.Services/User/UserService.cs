@@ -39,7 +39,7 @@ public class UserService(IUserRepository userRepository, IEmailSendingService em
         }
 
         await userRepository.SetPendingConfirmationAsUsedAsync(userId, ConfirmationType.VerifyEmail);
-        await userRepository.SetUserStatusAsync(userId, Status.Confirmed);
+        await userRepository.SetUserStatusAsync(userId, UserVerificationStatus.Confirmed);
     }
 
     private async Task SendEmailVerificationRequestAsync(Guid userId)

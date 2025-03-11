@@ -17,7 +17,7 @@ public static class AuthExtensions
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                var jwtOptions = builder.Configuration.GetRequiredSection(JwtOptions.SectionName).Get<JwtOptions>()!;
+                var jwtOptions = builder.Configuration.GetJwtOptionsSection().Get<JwtOptions>()!;
 
                 options.RequireHttpsMetadata = false;
                 options.TokenHandlers.Clear();
@@ -25,11 +25,6 @@ public static class AuthExtensions
             });
 
         return builder;
-    }
-
-    private static IServiceCollection AddJwtOptions(this IServiceCollection serviceCollection, IConfiguration configuration)
-    {
-        return serviceCollection.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
     }
 
     public static WebApplicationBuilder AddAuthorization(this WebApplicationBuilder builder)
@@ -42,5 +37,15 @@ public static class AuthExtensions
             .SetDefaultPolicy(requireAuthPolicy);
 
         return builder;
+    }
+
+    public static IServiceCollection AddJwtOptions(this IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        return serviceCollection.Configure<JwtOptions>(configuration.GetJwtOptionsSection());
+    }
+
+    public static IConfigurationSection GetJwtOptionsSection(this IConfiguration configuration)
+    {
+        return configuration.GetRequiredSection(JwtOptions.SectionName);
     }
 }

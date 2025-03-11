@@ -1,12 +1,13 @@
 ﻿using DealUp.Domain.User;
 using DealUp.Infrastructure.Requirements;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace DealUp.Infrastructure.Filters;
 
-public class UserStatusAuthorizationFilter(IAuthorizationService authorizationService, Status[] allowedStatuses) : IAsyncAuthorizationFilter
+public class UserStatusAuthorizationFilter(IAuthorizationService authorizationService, UserVerificationStatus[] allowedStatuses) : IAsyncAuthorizationFilter
 {
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
@@ -15,7 +16,7 @@ public class UserStatusAuthorizationFilter(IAuthorizationService authorizationSe
 
         if (!result.Succeeded)
         {
-            context.Result = new ForbidResult();
+            context.Result = new ForbidResult(JwtBearerDefaults.AuthenticationScheme);
         }
     }
 }

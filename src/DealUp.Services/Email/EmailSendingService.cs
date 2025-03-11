@@ -15,7 +15,7 @@ public class EmailSendingService(IEmailSenderFactory emailSenderFactory, IUserRe
         var user = await userRepository.GetUserByIdAsync(pendingConfirmation.UserId);
 
         string htmlBody = await BuildEmailVerificationBodyAsync(pendingConfirmation.Token, pendingConfirmation.UserId);
-        var messageToSend = Message.Create(user!.Email, "Confirm your DealUp account", htmlBody);
+        var messageToSend = Message.Create(user!.Username, "Confirm your DealUp account", htmlBody);
 
         var emailSender = emailSenderFactory.GetEmailSender();
         await emailSender.SendMessageAsync(messageToSend);

@@ -18,6 +18,6 @@ public static class Converter
 
     public static Credentials ToDomain(this CredentialsDto credentialsDto)
     {
-        return new Credentials(credentialsDto.Email, credentialsDto.Password.ToSha256());
+        return new Credentials(credentialsDto.Username, credentialsDto.Password.ToSha256());
     }
 }

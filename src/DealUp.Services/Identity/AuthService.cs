@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using DealUp.Constants;
 using DealUp.Domain.Auth;
 using DealUp.Domain.Identity.Interfaces;
 using DealUp.Domain.User.Interfaces;
@@ -19,10 +20,10 @@ public class AuthService(IOptions<JwtOptions> jwtOptions, IUserRepository userRe
 
     public async Task<JwtToken> RegisterUserAsync(Credentials credentials)
     {
-        var existingUser = await userRepository.GetUserByEmailAsync(credentials.Username);
+        var existingUser = await userRepository.GetUserByUsernameAsync(credentials.Username);
         if (existingUser is not null)
         {
-            throw new InvalidUserException($"User with email: {existingUser.Email} already exists.");
+            throw new InvalidUserException($"User with email: {existingUser.Username} already exists.");
         }
 
         var newUser = UserDomain.CreateNew(credentials.Username, credentials.Password);
@@ -33,7 +34,7 @@ public class AuthService(IOptions<JwtOptions> jwtOptions, IUserRepository userRe
 
     public async Task<JwtToken> GetTokenAsync(Credentials credentials)
     {
-        var user = await userRepository.GetUserByEmailAsync(credentials.Username);
+        var user = await userRepository.GetUserByUsernameAsync(credentials.Username);
         if (user?.IsMatchingPassword(credentials) is not true)
         {
             throw new InvalidUserException("User does not exist or password is wrong.");
@@ -68,8 +69,8 @@ public class AuthService(IOptions<JwtOptions> jwtOptions, IUserRepository userRe
         return new ClaimsIdentity(
             [
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Status.ToString())
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimsConstants.UserStatus, user.Status.ToString())
             ],
             JwtBearerDefaults.AuthenticationScheme,
             ClaimsIdentity.DefaultNameClaimType,
