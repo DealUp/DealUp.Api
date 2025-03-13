@@ -6,7 +6,7 @@ using DealUp.Infrastructure.Configuration.Options;
 using Microsoft.IdentityModel.Tokens;
 using JwtConstants = DealUp.Constants.JwtConstants;
 
-namespace DealUp.Infrastructure.Configuration.Middlewares;
+namespace DealUp.Infrastructure.Handlers;
 
 public class JwtValidationHandler(JwtOptions jwtOptions) : JwtSecurityTokenHandler
 {

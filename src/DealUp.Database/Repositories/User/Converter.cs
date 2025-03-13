@@ -1,19 +1,49 @@
-﻿namespace DealUp.Database.Repositories.User;
+﻿using DealUp.Dal;
+using DealUp.Domain.User;
+using DealUp.Utils;
+using UserDomain = DealUp.Domain.User.User;
+
+namespace DealUp.Database.Repositories.User;
 
 public static class Converter
 {
-    public static Domain.User.User ToDomain(this Dal.User userDal)
+    public static UserDomain ToDomain(this Dal.User user)
     {
-        return new Domain.User.User(userDal.Id, userDal.Email, userDal.Password);
+        return new UserDomain(user.Id, user.Username, user.Password, user.Status.ToEnum<UserVerificationStatus>());
     }
 
-    public static Dal.User ToDal(this Domain.User.User userDomain)
+    public static Dal.User ToDal(this UserDomain user)
     {
         return new Dal.User
         {
-            Id = userDomain.Id,
-            Email = userDomain.Email,
-            Password = userDomain.Password
+            Id = user.Id,
+            Username = user.Username,
+            Password = user.Password,
+            Status = user.Status.ToString()
+        };
+    }
+
+    public static PendingConfirmation ToDomain(this UserPendingConfirmation pendingConfirmation)
+    {
+        return new PendingConfirmation(
+            pendingConfirmation.Id,
+            pendingConfirmation.UserId,
+            pendingConfirmation.Type.ToEnum<ConfirmationType>(),
+            pendingConfirmation.Token,
+            pendingConfirmation.IsUsed,
+            pendingConfirmation.CreatedAt);
+    }
+
+    public static UserPendingConfirmation ToDal(this PendingConfirmation pendingConfirmation)
+    {
+        return new UserPendingConfirmation
+        {
+            Id = pendingConfirmation.Id,
+            UserId = pendingConfirmation.UserId,
+            Type = pendingConfirmation.Type.ToString(),
+            Token = pendingConfirmation.Token,
+            IsUsed = pendingConfirmation.IsUsed,
+            CreatedAt = pendingConfirmation.CreationDate
         };
     }
 }

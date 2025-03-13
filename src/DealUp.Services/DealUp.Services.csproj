@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DealUp.Domain\DealUp.Domain.csproj" />
+      <ProjectReference Include="..\DealUp.EmailSender\DealUp.EmailSender.csproj" />
       <ProjectReference Include="..\DealUp.Exceptions\DealUp.Exceptions.csproj" />
       <ProjectReference Include="..\DealUp.Infrastructure\DealUp.Infrastructure.csproj" />
     </ItemGroup>

@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace DealUp.Utils;
 
@@ -6,11 +6,11 @@ public static class JsonUtils
 {
     public static string ToJson<T>(this T data)
     {
-        return JsonConvert.SerializeObject(data);
+        return JsonSerializer.Serialize(data);
     }
 
     public static T? FromJson<T>(string jsonData)
     {
-        return JsonConvert.DeserializeObject<T>(jsonData);
+        return JsonSerializer.Deserialize<T>(jsonData);
     }
 }

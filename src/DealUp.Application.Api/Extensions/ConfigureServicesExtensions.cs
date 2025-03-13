@@ -1,30 +1,46 @@
-using DealUp.Database.Repositories;
 using DealUp.Database.Repositories.User;
-using DealUp.Domain.Auth.Interfaces;
-using DealUp.Domain.User;
-using DealUp.Services;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
+using DealUp.Domain.Email.Interfaces;
+using DealUp.Domain.Identity.Interfaces;
+using DealUp.Domain.User.Interfaces;
+using DealUp.EmailSender.Extensions;
+using DealUp.Infrastructure.Handlers;
+using DealUp.Services.Email;
+using DealUp.Services.Identity;
+using DealUp.Services.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DealUp.Application.Api.Extensions;
 
 public static class ConfigureServicesExtensions
 {
-    public static IMvcBuilder SetCamelCaseResponse(this IMvcBuilder builder)
+    public static IServiceCollection ConfigureServices(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        return builder.AddNewtonsoftJson(options =>
-        {
-            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            options.SerializerSettings.Converters.Add(new StringEnumConverter());
-            options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-        });
+        return serviceCollection
+            .AddIdentityServices()
+            .AddUserServices()
+            .AddEmailSendingServices(configuration);
     }
 
-    public static IServiceCollection ConfigureServices(this IServiceCollection services)
+    private static IServiceCollection AddIdentityServices(this IServiceCollection serviceCollection)
     {
-        return services
+        return serviceCollection
+            .AddHttpContextAccessor()
+            .AddTransient<IHttpContextService, HttpContextService>()
             .AddTransient<IAuthService, AuthService>()
+            .AddTransient<IAuthorizationHandler, UserStatusHandler>();
+    }
+
+    private static IServiceCollection AddUserServices(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection
+            .AddTransient<IUserService, UserService>()
             .AddTransient<IUserRepository, UserRepository>();
+    }
+
+    private static IServiceCollection AddEmailSendingServices(this IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        return serviceCollection
+            .AddTransient<IEmailSendingService, EmailSendingService>()
+            .AddEmailInfrastructure(configuration);
     }
 }

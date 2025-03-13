@@ -10,7 +10,9 @@ public static class Converter
     {
         return new JwtTokenDto
         {
-            AccessToken = token.Value
+            Type = token.Type,
+            AccessToken = token.AccessToken,
+            ExpiresIn = token.ExpiresIn
         };
     }
 

@@ -7,12 +7,9 @@ public abstract class ResponseErrorException : Exception
     public abstract HttpStatusCode ResponseStatusCode { get; }
     public virtual object? AdditionalData { get; }
 
-    protected ResponseErrorException(object? additionalData)
-    {
-        AdditionalData = additionalData;
-    }
+    protected ResponseErrorException(string? message) : base(message) { }
 
-    protected ResponseErrorException(string? message, object? additionalData) : base(message)
+    protected ResponseErrorException(string? message, object? additionalData) : this(message)
     {
         AdditionalData = additionalData;
     }

@@ -1,10 +1,11 @@
 ﻿using System.Net;
 using DealUp.Exceptions;
+using DealUp.Infrastructure.Configuration;
 using DealUp.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace DealUp.Infrastructure.Configuration.Middlewares;
+namespace DealUp.Infrastructure.Middlewares;
 
 public class ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
 {

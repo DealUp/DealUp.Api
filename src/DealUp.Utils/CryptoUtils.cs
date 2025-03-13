@@ -5,6 +5,11 @@ namespace DealUp.Utils;
 
 public static class CryptoUtils
 {
+    public static string GetRandomString(int length = 64, bool isLowercase = false)
+    {
+        return RandomNumberGenerator.GetHexString(length, isLowercase);
+    }
+
     public static byte[] ToBytes(this string input)
     {
         return Encoding.ASCII.GetBytes(input);

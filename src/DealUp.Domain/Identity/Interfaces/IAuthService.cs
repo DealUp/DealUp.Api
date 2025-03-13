@@ -1,4 +1,6 @@
-namespace DealUp.Domain.Auth.Interfaces;
+using DealUp.Domain.Auth;
+
+namespace DealUp.Domain.Identity.Interfaces;
 
 public interface IAuthService
 {

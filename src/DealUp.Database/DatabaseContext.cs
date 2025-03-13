@@ -7,6 +7,7 @@ namespace DealUp.Database;
 public class DatabaseContext(DbContextOptions<DatabaseContext> options) : DbContext(options)
 {
     protected DbSet<User> Users { get; set; }
+    protected DbSet<UserPendingConfirmation> UserPendingConfirmations { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
