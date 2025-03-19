@@ -26,7 +26,7 @@ public class UserController(IHttpContextService httpContextService, IUserService
     [HttpGet("verify-email")]
     public async Task<IActionResult> VerifyEmail([FromQuery] Guid userId, [FromQuery] string token)
     {
-        await userService.VerifyUserAsync(userId, token);
+        await userService.VerifyUserAsync(FinishVerificationRequest.Create(userId, token));
         return Ok();
     }
 }

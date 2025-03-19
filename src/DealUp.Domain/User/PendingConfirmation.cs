@@ -9,12 +9,20 @@ public class PendingConfirmation(Guid id, Guid userId, ConfirmationType type, st
     public DateTime CreationDate { get; private set; } = creationDate;
 
     private PendingConfirmation(Guid userId, ConfirmationType type, string token)
-        : this(Guid.CreateVersion7(), userId,type, token, isUsed: false, DateTime.UtcNow) { }
+        : this(Guid.CreateVersion7(), userId, type, token, isUsed: false, DateTime.UtcNow)
+    {
+        
+    }
 
     public bool IsRecent()
     {
         TimeSpan difference = DateTime.UtcNow - CreationDate;
         return difference.TotalMinutes <= 5;
+    }
+
+    public void SetAsUsed()
+    {
+        IsUsed = true;
     }
 
     public static PendingConfirmation CreateForEmailVerification(Guid userId, string token)

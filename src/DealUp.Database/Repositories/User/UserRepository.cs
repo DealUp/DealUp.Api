@@ -34,33 +34,6 @@ public class UserRepository(DatabaseContext databaseContext) : IUserRepository
             .ExecuteUpdateAsync(setter => setter.SetProperty(x => x.Status, userVerificationStatus.ToString()));
     }
 
-    public Task<bool> IsPendingConfirmationExistsAsync(Guid userId, ConfirmationType type)
-    {
-        return databaseContext.Set<UserPendingConfirmation>()
-            .AsNoTracking()
-            .Where(verification => verification.UserId == userId && verification.Type == type.ToString() && !verification.IsUsed)
-            .AnyAsync();
-    }
-
-    public async Task<PendingConfirmation?> GetPendingConfirmationAsync(Guid userId, ConfirmationType type)
-    {
-        var pendingConfirmation = await databaseContext.Set<UserPendingConfirmation>()
-            .AsNoTracking()
-            .Where(verification => verification.UserId == userId && verification.Type == type.ToString() && !verification.IsUsed)
-            .OrderByDescending(v => v.CreatedAt)
-            .FirstOrDefaultAsync();
-
-        return pendingConfirmation?.ToDomain();
-    }
-
-    public Task SetPendingConfirmationAsUsedAsync(Guid userId, ConfirmationType type)
-    {
-        return databaseContext.Set<UserPendingConfirmation>()
-            .AsNoTracking()
-            .Where(verification => verification.UserId == userId && verification.Type == type.ToString())
-            .ExecuteUpdateAsync(setter => setter.SetProperty(x => x.IsUsed, true));
-    }
-
     public async Task<Guid> SaveUserAsync(UserDomain user)
     {
         await databaseContext.AddAsync(user.ToDal());
@@ -68,9 +41,26 @@ public class UserRepository(DatabaseContext databaseContext) : IUserRepository
         return user.Id;
     }
 
-    public async Task<Guid> SavePendingConfirmationAsync(PendingConfirmation confirmation)
+    public async Task<PendingConfirmation?> GetPendingConfirmationAsync(Guid userId, ConfirmationType type)
+    {
+        var pendingConfirmation = await databaseContext.Set<UserPendingConfirmation>()
+            .Where(verification => verification.UserId == userId && verification.Type == type.ToString() && !verification.IsUsed)
+            .OrderByDescending(v => v.CreatedAt)
+            .FirstOrDefaultAsync();
+
+        return pendingConfirmation?.ToDomain();
+    }
+
+    public async Task<Guid> SaveNewPendingConfirmationAsync(PendingConfirmation confirmation)
     {
         await databaseContext.AddAsync(confirmation.ToDal());
+        await databaseContext.SaveChangesAsync();
+        return confirmation.Id;
+    }
+
+    public async Task<Guid> UpdatePendingConfirmationAsync(PendingConfirmation confirmation)
+    {
+        databaseContext.Update(confirmation.ToDal());
         await databaseContext.SaveChangesAsync();
         return confirmation.Id;
     }
