@@ -1,4 +1,4 @@
-﻿using DealUp.Infrastructure.Configuration.Options;
+﻿using DealUp.Infrastructure.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

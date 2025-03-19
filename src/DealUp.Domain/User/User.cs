@@ -1,4 +1,4 @@
-using DealUp.Domain.Auth;
+using DealUp.Domain.Identity;
 
 namespace DealUp.Domain.User;
 
@@ -8,14 +8,17 @@ public class User(Guid? id, string username, string? password, UserVerificationS
     public string? Password { get; private set; } = password;
     public UserVerificationStatus Status { get; private set; } = status;
 
-    private User(string username, string password, UserVerificationStatus status) : this(Guid.CreateVersion7(), username, password, status) { }
+    private User(string username, string? password, UserVerificationStatus status) : this(Guid.CreateVersion7(), username, password, status)
+    {
+        
+    }
 
     public bool IsMatchingPassword(Credentials credentials)
     {
         return Password == credentials.Password;
     }
 
-    public static User CreateNew(string username, string password)
+    public static User CreateNew(string username, string? password)
     {
         return new User(username, password, UserVerificationStatus.Unverified);
     }

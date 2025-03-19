@@ -1,4 +1,4 @@
-﻿namespace DealUp.Infrastructure.Configuration.Options;
+﻿namespace DealUp.Infrastructure.Configuration;
 
 public class EmailSendingOptions
 {

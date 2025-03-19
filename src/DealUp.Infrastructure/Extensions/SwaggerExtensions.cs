@@ -2,7 +2,7 @@ using DealUp.Constants;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-namespace DealUp.Infrastructure.Configuration.Extensions;
+namespace DealUp.Infrastructure.Extensions;
 
 public static class SwaggerExtensions
 {

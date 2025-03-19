@@ -1,4 +1,4 @@
-namespace DealUp.Domain.Auth;
+namespace DealUp.Domain.Identity;
 
 public class Credentials(string username, string password)
 {

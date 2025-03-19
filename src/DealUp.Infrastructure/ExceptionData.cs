@@ -1,4 +1,4 @@
-namespace DealUp.Infrastructure.Configuration;
+namespace DealUp.Infrastructure;
 
 public class ExceptionData(int statusCode, string message, string? details, object? additionalData = null)
 {

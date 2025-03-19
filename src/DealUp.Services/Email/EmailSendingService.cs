@@ -3,7 +3,7 @@ using DealUp.Domain.Email.Interfaces;
 using DealUp.Domain.User;
 using DealUp.Domain.User.Interfaces;
 using DealUp.EmailSender.Interfaces;
-using DealUp.Infrastructure.Configuration.Options;
+using DealUp.Infrastructure.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace DealUp.Services.Email;

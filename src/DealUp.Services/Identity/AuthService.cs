@@ -1,12 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using DealUp.Constants;
-using DealUp.Domain.Auth;
+using DealUp.Domain.Identity;
 using DealUp.Domain.Identity.Interfaces;
 using DealUp.Domain.User.Interfaces;
 using DealUp.Exceptions;
-using DealUp.Infrastructure.Configuration.Options;
+using DealUp.Infrastructure.Configuration;
 using DealUp.Utils;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -29,7 +30,7 @@ public class AuthService(IOptions<JwtOptions> jwtOptions, IUserRepository userRe
         var newUser = UserDomain.CreateNew(credentials.Username, credentials.Password);
         await userRepository.SaveUserAsync(newUser);
 
-        return BuildJwtToken(newUser);
+        return BuildJwt(newUser);
     }
 
     public async Task<JwtToken> GetTokenAsync(Credentials credentials)
@@ -40,10 +41,10 @@ public class AuthService(IOptions<JwtOptions> jwtOptions, IUserRepository userRe
             throw new InvalidUserException("User does not exist or password is wrong.");
         }
 
-        return BuildJwtToken(user);
+        return BuildJwt(user);
     }
 
-    private JwtToken BuildJwtToken(UserDomain user)
+    public JwtToken BuildJwt(UserDomain user)
     {
         var expirationTimeSpan = TimeSpan.FromMinutes(_jwtOptions.MinutesToExpire);
 

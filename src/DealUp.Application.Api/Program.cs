@@ -1,6 +1,6 @@
 using DealUp.Application.Api.Extensions;
 using DealUp.Database.Extensions;
-using DealUp.Infrastructure.Configuration.Extensions;
+using DealUp.Infrastructure.Extensions;
 using DealUp.Infrastructure.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
         policyBuilder.SetIsOriginAllowed(origin =>
         {
             var host = new Uri(origin).Host;
-            return host == "localhost" || host == "127.0.0.1";
+            return host is "localhost" or "127.0.0.1";
         }).AllowAnyMethod().AllowAnyHeader().AllowCredentials();
     });
 });
@@ -40,17 +40,13 @@ app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
 app.MapGet("/health", context => context.Response.WriteAsync("Alive!"));
 app.MapControllers();
 
-if (app.Environment.IsProduction())
+if (app.Environment.IsDevelopment())
 {
-    await app.ExecuteMigrationsAsync();
+    app.MapOpenApi();
+    // await app.ExecuteMigrationsAsync();
 }
 
 await app.RunAsync();

@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using DealUp.Domain.Identity.Interfaces;
-using DealUp.Dto.v1.Auth;
+using DealUp.Dto.v1.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DealUp.Application.Api.Controllers.v1.Auth;
+namespace DealUp.Application.Api.Controllers.v1.Identity;
 
 [ApiController]
 [Route("api/v1/auth")]
@@ -26,7 +27,7 @@ public class AuthController(IAuthService authService, IHttpContextService httpCo
         return Ok(token.ToDto());
     }
 
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [HttpGet("test")]
     public ActionResult TestAuth()
     {
