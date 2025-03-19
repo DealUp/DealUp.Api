@@ -25,21 +25,24 @@ public class UserService(IUserRepository userRepository, IEmailSendingService em
             return StartVerificationResponse.CreateUnsuccessful("A verification email has already been sent recently. Please wait before requesting another one.");
         }
 
-        await userRepository.SetPendingConfirmationAsUsedAsync(userId, ConfirmationType.VerifyEmail);
+        pendingConfirmation.SetAsUsed();
+        await userRepository.UpdatePendingConfirmationAsync(pendingConfirmation);
+
         await SendEmailVerificationRequestAsync(userId);
         return StartVerificationResponse.CreateSuccessful("A verification email has been successfully sent.");
     }
 
-    public async Task VerifyUserAsync(Guid userId, string token)
+    public async Task VerifyUserAsync(FinishVerificationRequest request)
     {
-        var isPendingConfirmationExists = await userRepository.IsPendingConfirmationExistsAsync(userId, ConfirmationType.VerifyEmail);
-        if (!isPendingConfirmationExists)
+        var pendingConfirmation = await userRepository.GetPendingConfirmationAsync(request.UserId, ConfirmationType.VerifyEmail);
+        if (pendingConfirmation is null || pendingConfirmation.Token != request.Token)
         {
             throw new VerificationValidationException();
         }
 
-        await userRepository.SetPendingConfirmationAsUsedAsync(userId, ConfirmationType.VerifyEmail);
-        await userRepository.SetUserStatusAsync(userId, UserVerificationStatus.Confirmed);
+        pendingConfirmation.SetAsUsed();
+        await userRepository.UpdatePendingConfirmationAsync(pendingConfirmation);
+        await userRepository.SetUserStatusAsync(request.UserId, UserVerificationStatus.Confirmed);
     }
 
     private async Task SendEmailVerificationRequestAsync(Guid userId)
@@ -47,7 +50,7 @@ public class UserService(IUserRepository userRepository, IEmailSendingService em
         var secureToken = CryptoUtils.GetRandomString(options.Value.SecureTokenLength);
         var pendingVerification = PendingConfirmation.CreateForEmailVerification(userId, secureToken);
 
-        await userRepository.SavePendingConfirmationAsync(pendingVerification);
+        await userRepository.SaveNewPendingConfirmationAsync(pendingVerification);
         await emailSendingService.SendEmailVerificationAsync(pendingVerification);
     }
 }
