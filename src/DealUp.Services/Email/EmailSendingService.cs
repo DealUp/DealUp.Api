@@ -1,21 +1,18 @@
 ﻿using DealUp.Domain.Email;
 using DealUp.Domain.Email.Interfaces;
 using DealUp.Domain.User;
-using DealUp.Domain.User.Interfaces;
 using DealUp.EmailSender.Interfaces;
 using DealUp.Infrastructure.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace DealUp.Services.Email;
 
-public class EmailSendingService(IEmailSenderFactory emailSenderFactory, IUserRepository userRepository, IOptions<EmailSendingOptions> options) : IEmailSendingService
+public class EmailSendingService(IEmailSenderFactory emailSenderFactory, IOptions<EmailSendingOptions> options) : IEmailSendingService
 {
-    public async Task SendEmailVerificationAsync(PendingConfirmation pendingConfirmation)
+    public async Task SendEmailVerificationAsync(UserPendingConfirmation userPendingConfirmation)
     {
-        var user = await userRepository.GetUserByIdAsync(pendingConfirmation.UserId);
-
-        string htmlBody = await BuildEmailVerificationBodyAsync(pendingConfirmation.Token, pendingConfirmation.UserId);
-        var messageToSend = Message.Create(user!.Username, "Confirm your DealUp account", htmlBody);
+        string htmlBody = await BuildEmailVerificationBodyAsync(userPendingConfirmation.Token, userPendingConfirmation.User.Id);
+        var messageToSend = Message.Create(userPendingConfirmation.User.Username, "Confirm your DealUp account", htmlBody);
 
         var emailSender = emailSenderFactory.GetEmailSender();
         await emailSender.SendMessageAsync(messageToSend);

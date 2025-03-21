@@ -9,7 +9,7 @@ public static class ApplicationExtensions
     public static async Task ExecuteMigrationsAsync(this IHost application)
     {
         using var serviceScope = application.Services.CreateScope();
-        var databaseContext = serviceScope.ServiceProvider.GetRequiredService<DatabaseContext>();
+        var databaseContext = serviceScope.ServiceProvider.GetRequiredService<PostgresqlContext>();
         await databaseContext.Database.MigrateAsync();
     }
 }

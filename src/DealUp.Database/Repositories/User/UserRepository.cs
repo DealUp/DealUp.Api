@@ -1,66 +1,52 @@
-﻿using DealUp.Dal;
-using DealUp.Domain.User;
+﻿using DealUp.Domain.User;
 using DealUp.Domain.User.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using UserDomain = DealUp.Domain.User.User;
 
 namespace DealUp.Database.Repositories.User;
 
-public class UserRepository(DatabaseContext databaseContext) : IUserRepository
+public class UserRepository(PostgresqlContext databaseContext) : IUserRepository
 {
     public async Task<UserDomain?> GetUserByIdAsync(Guid userId)
     {
-        var user = await databaseContext.Set<Dal.User>()
+        return await databaseContext.Set<UserDomain>()
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == userId);
-
-        return user?.ToDomain();
     }
 
     public async Task<UserDomain?> GetUserByUsernameAsync(string username)
     {
-        var user = await databaseContext.Set<Dal.User>()
+        return await databaseContext.Set<UserDomain>()
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Username == username);
-
-        return user?.ToDomain();
-    }
-
-    public Task SetUserStatusAsync(Guid userId, UserVerificationStatus userVerificationStatus)
-    {
-        return databaseContext.Set<Dal.User>()
-            .AsNoTracking()
-            .Where(user => user.Id == userId)
-            .ExecuteUpdateAsync(setter => setter.SetProperty(x => x.Status, userVerificationStatus.ToString()));
     }
 
     public async Task<Guid> SaveUserAsync(UserDomain user)
     {
-        await databaseContext.AddAsync(user.ToDal());
+        await databaseContext.AddAsync(user);
         await databaseContext.SaveChangesAsync();
         return user.Id;
     }
 
-    public async Task<PendingConfirmation?> GetPendingConfirmationAsync(Guid userId, ConfirmationType type)
+    public async Task<UserPendingConfirmation?> GetPendingConfirmationAsync(Guid userId, ConfirmationType type)
     {
-        var pendingConfirmation = await databaseContext.Set<UserPendingConfirmation>()
-            .Where(verification => verification.UserId == userId && verification.Type == type.ToString() && !verification.IsUsed)
+        return await databaseContext.Set<UserPendingConfirmation>()
+            .Include(x => x.User)
+            .Where(confirmation => confirmation.User.Id == userId && confirmation.Type == type && !confirmation.IsUsed)
             .OrderByDescending(v => v.CreatedAt)
             .FirstOrDefaultAsync();
-
-        return pendingConfirmation?.ToDomain();
     }
 
-    public async Task<Guid> SaveNewPendingConfirmationAsync(PendingConfirmation confirmation)
+    public async Task<Guid> SaveNewPendingConfirmationAsync(UserPendingConfirmation confirmation)
     {
-        await databaseContext.AddAsync(confirmation.ToDal());
+        await databaseContext.AddAsync(confirmation);
         await databaseContext.SaveChangesAsync();
         return confirmation.Id;
     }
 
-    public async Task<Guid> UpdatePendingConfirmationAsync(PendingConfirmation confirmation)
+    public async Task<Guid> UpdatePendingConfirmationAsync(UserPendingConfirmation confirmation)
     {
-        databaseContext.Update(confirmation.ToDal());
+        databaseContext.Update(confirmation);
         await databaseContext.SaveChangesAsync();
         return confirmation.Id;
     }

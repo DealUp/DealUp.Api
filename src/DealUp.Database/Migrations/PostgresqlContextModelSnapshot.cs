@@ -3,7 +3,6 @@ using System;
 using DealUp.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,12 +10,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace DealUp.Database.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
-    [Migration("20250311235317_AddUserPendingConfirmationTable")]
-    partial class AddUserPendingConfirmationTable
+    [DbContext(typeof(PostgresqlContext))]
+    partial class PostgresqlContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,76 +22,74 @@ namespace DealUp.Database.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DealUp.Dal.User", b =>
+            modelBuilder.Entity("DealUp.Domain.Abstractions.EntityBase", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("ModifiedAt")
+                        .ValueGeneratedOnUpdate()
                         .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable((string)null);
+
+                    b.UseTpcMappingStrategy();
+                });
+
+            modelBuilder.Entity("DealUp.Domain.User.User", b =>
+                {
+                    b.HasBaseType("DealUp.Domain.Abstractions.EntityBase");
 
                     b.Property<string>("Password")
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
-            modelBuilder.Entity("DealUp.Dal.UserPendingConfirmation", b =>
+            modelBuilder.Entity("DealUp.Domain.User.UserPendingConfirmation", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.HasBaseType("DealUp.Domain.Abstractions.EntityBase");
 
                     b.Property<bool>("IsUsed")
                         .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Token")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserPendingConfirmations");
+                    b.ToTable("UserPendingConfirmation");
                 });
 
-            modelBuilder.Entity("DealUp.Dal.UserPendingConfirmation", b =>
+            modelBuilder.Entity("DealUp.Domain.User.UserPendingConfirmation", b =>
                 {
-                    b.HasOne("DealUp.Dal.User", "User")
+                    b.HasOne("DealUp.Domain.User.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

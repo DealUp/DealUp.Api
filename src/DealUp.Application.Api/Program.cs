@@ -46,7 +46,7 @@ app.MapControllers();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    // await app.ExecuteMigrationsAsync();
+    await app.ExecuteMigrationsAsync();
 }
 
 await app.RunAsync();

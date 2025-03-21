@@ -40,15 +40,16 @@ public class UserService(IUserRepository userRepository, IEmailSendingService em
             throw new VerificationValidationException();
         }
 
-        pendingConfirmation.SetAsUsed();
+        pendingConfirmation.ConfirmUser();
         await userRepository.UpdatePendingConfirmationAsync(pendingConfirmation);
-        await userRepository.SetUserStatusAsync(request.UserId, UserVerificationStatus.Confirmed);
     }
 
     private async Task SendEmailVerificationRequestAsync(Guid userId)
     {
+        var existingUser = await userRepository.GetUserByIdAsync(userId);
         var secureToken = CryptoUtils.GetRandomString(options.Value.SecureTokenLength);
-        var pendingVerification = PendingConfirmation.CreateForEmailVerification(userId, secureToken);
+
+        var pendingVerification = UserPendingConfirmation.CreateForEmailVerification(existingUser!, secureToken);
 
         await userRepository.SaveNewPendingConfirmationAsync(pendingVerification);
         await emailSendingService.SendEmailVerificationAsync(pendingVerification);
