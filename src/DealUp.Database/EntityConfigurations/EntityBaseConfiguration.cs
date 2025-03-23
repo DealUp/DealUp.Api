@@ -11,7 +11,6 @@ public class EntityBaseConfiguration : IEntityTypeConfiguration<EntityBase>
     {
         builder.UseTpcMappingStrategy();
 
-        builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
 
@@ -22,5 +21,7 @@ public class EntityBaseConfiguration : IEntityTypeConfiguration<EntityBase>
         builder.Property(x => x.ModifiedAt)
             .ValueGeneratedOnUpdate()
             .HasValueGenerator<CurrentUtcDateTimeGenerator>();
+
+        builder.HasKey(x => x.Id);
     }
 }

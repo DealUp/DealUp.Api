@@ -8,9 +8,11 @@ public class UserPendingConfirmationConfiguration : IEntityTypeConfiguration<Use
 {
     public void Configure(EntityTypeBuilder<UserPendingConfirmation> builder)
     {
-        builder.Property(x => x.IsUsed);
-        builder.Property(x => x.Type);
         builder.Property(x => x.Token);
+        builder.Property(x => x.IsUsed);
+
+        builder.Property(x => x.Type)
+            .HasConversion<string>();
 
         builder.HasOne(x => x.User)
             .WithMany()

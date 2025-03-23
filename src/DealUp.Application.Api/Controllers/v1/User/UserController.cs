@@ -1,6 +1,7 @@
 ﻿using DealUp.Domain.Identity.Interfaces;
 using DealUp.Domain.User;
 using DealUp.Domain.User.Interfaces;
+using DealUp.Domain.User.Values;
 using DealUp.Dto.v1.User;
 using DealUp.Infrastructure.Attributes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

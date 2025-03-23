@@ -1,3 +1,5 @@
+using DealUp.Domain.User.Values;
+
 namespace DealUp.Domain.User.Interfaces;
 
 public interface IUserRepository

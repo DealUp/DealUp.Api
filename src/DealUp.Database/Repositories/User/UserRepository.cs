@@ -1,5 +1,6 @@
 ﻿using DealUp.Domain.User;
 using DealUp.Domain.User.Interfaces;
+using DealUp.Domain.User.Values;
 using Microsoft.EntityFrameworkCore;
 using UserDomain = DealUp.Domain.User.User;
 
@@ -9,16 +10,12 @@ public class UserRepository(PostgresqlContext databaseContext) : IUserRepository
 {
     public async Task<UserDomain?> GetUserByIdAsync(Guid userId)
     {
-        return await databaseContext.Set<UserDomain>()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == userId);
+        return await databaseContext.Set<UserDomain>().FirstOrDefaultAsync(x => x.Id == userId);
     }
 
     public async Task<UserDomain?> GetUserByUsernameAsync(string username)
     {
-        return await databaseContext.Set<UserDomain>()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Username == username);
+        return await databaseContext.Set<UserDomain>().FirstOrDefaultAsync(x => x.Username == username);
     }
 
     public async Task<Guid> SaveUserAsync(UserDomain user)
@@ -39,14 +36,14 @@ public class UserRepository(PostgresqlContext databaseContext) : IUserRepository
 
     public async Task<Guid> SaveNewPendingConfirmationAsync(UserPendingConfirmation confirmation)
     {
-        await databaseContext.AddAsync(confirmation);
+        await databaseContext.Set<UserPendingConfirmation>().AddAsync(confirmation);
         await databaseContext.SaveChangesAsync();
         return confirmation.Id;
     }
 
     public async Task<Guid> UpdatePendingConfirmationAsync(UserPendingConfirmation confirmation)
     {
-        databaseContext.Update(confirmation);
+        databaseContext.Set<UserPendingConfirmation>().Update(confirmation);
         await databaseContext.SaveChangesAsync();
         return confirmation.Id;
     }

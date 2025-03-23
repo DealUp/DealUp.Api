@@ -9,7 +9,4 @@ public class CredentialsDto
 
     [Required, MinLength(8)]
     public required string Password { get; set; }
-
-    [Required, Compare(nameof(Password))]
-    public required string PasswordConfirmation { get; set; }
 }
