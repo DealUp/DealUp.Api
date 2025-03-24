@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DealUp.Infrastructure.Configuration.Extensions;
+namespace DealUp.Infrastructure.Extensions;
 
 public static class SerializationExtensions
 {

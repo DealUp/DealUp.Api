@@ -6,6 +6,7 @@ using DealUp.EmailSender.Extensions;
 using DealUp.Infrastructure.Handlers;
 using DealUp.Services.Email;
 using DealUp.Services.Identity;
+using DealUp.Services.Identity.SsoProviders;
 using DealUp.Services.User;
 using Microsoft.AspNetCore.Authorization;
 
@@ -25,9 +26,17 @@ public static class ConfigureServicesExtensions
     {
         return serviceCollection
             .AddHttpContextAccessor()
+            .AddSsoProviders()
             .AddTransient<IHttpContextService, HttpContextService>()
             .AddTransient<IAuthService, AuthService>()
             .AddTransient<IAuthorizationHandler, UserStatusHandler>();
+    }
+
+    private static IServiceCollection AddSsoProviders(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection
+            .AddTransient<ISsoServiceFactory, SsoServiceFactory>()
+            .AddTransient<ISsoProviderService, GoogleSsoService>();
     }
 
     private static IServiceCollection AddUserServices(this IServiceCollection serviceCollection)

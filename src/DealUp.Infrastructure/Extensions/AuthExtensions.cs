@@ -1,12 +1,13 @@
-using DealUp.Infrastructure.Configuration.Options;
+using DealUp.Infrastructure.Configuration;
 using DealUp.Infrastructure.Handlers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DealUp.Infrastructure.Configuration.Extensions;
+namespace DealUp.Infrastructure.Extensions;
 
 public static class AuthExtensions
 {
@@ -14,7 +15,23 @@ public static class AuthExtensions
     {
         builder.Services
             .AddJwtOptions(builder.Configuration)
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddOauthOptions(builder.Configuration)
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie()
+            .AddGoogle(options =>
+            {
+                var googleOptions = builder.Configuration.GetOauthOptionsSection().Get<OauthOptions>()!.GoogleProviderOptions;
+
+                options.ClientId = googleOptions.ClientId;
+                options.ClientSecret = googleOptions.ClientSecret;
+                options.CallbackPath = googleOptions.CallbackUrl;
+                options.SaveTokens = false;
+            })
             .AddJwtBearer(options =>
             {
                 var jwtOptions = builder.Configuration.GetJwtOptionsSection().Get<JwtOptions>()!;
@@ -44,8 +61,18 @@ public static class AuthExtensions
         return serviceCollection.Configure<JwtOptions>(configuration.GetJwtOptionsSection());
     }
 
+    public static IServiceCollection AddOauthOptions(this IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        return serviceCollection.Configure<OauthOptions>(configuration.GetOauthOptionsSection());
+    }
+
     public static IConfigurationSection GetJwtOptionsSection(this IConfiguration configuration)
     {
         return configuration.GetRequiredSection(JwtOptions.SectionName);
+    }
+
+    public static IConfigurationSection GetOauthOptionsSection(this IConfiguration configuration)
+    {
+        return configuration.GetRequiredSection(OauthOptions.SectionName);
     }
 }

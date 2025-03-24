@@ -1,4 +1,4 @@
-namespace DealUp.Dto.v1.Auth;
+namespace DealUp.Dto.v1.Identity;
 
 public class JwtTokenDto
 {

@@ -3,6 +3,7 @@ using DealUp.Domain.User;
 using DealUp.Domain.User.Interfaces;
 using DealUp.Dto.v1.User;
 using DealUp.Infrastructure.Attributes;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +13,7 @@ namespace DealUp.Application.Api.Controllers.v1.User;
 [Route("api/v1/user")]
 public class UserController(IHttpContextService httpContextService, IUserService userService) : ControllerBase
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [AuthorizeFor(UserVerificationStatus.Unverified)]
     [HttpGet("start-email-verification")]
     public async Task<ActionResult<StartVerificationResponseDto>> StartEmailVerification()

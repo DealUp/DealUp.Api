@@ -1,6 +1,6 @@
 using DealUp.EmailSender.Interfaces;
 using DealUp.EmailSender.Providers;
-using DealUp.Infrastructure.Configuration.Options;
+using DealUp.Infrastructure.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Resend;

@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using DealUp.Exceptions;
-using DealUp.Infrastructure.Configuration.Options;
+using DealUp.Infrastructure.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using JwtConstants = DealUp.Constants.JwtConstants;
 
