@@ -11,10 +11,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.Property(x => x.Title);
         builder.Property(x => x.Description);
-        builder.Property(x => x.Price);
 
         builder.Property(x => x.Labels)
-            .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasJsonConversion();
     }
 }

@@ -7,7 +7,6 @@ public class Product : EntityBase
 {
     public string Title { get; private set; }
     public string Description { get; private set; }
-    public decimal Price { get; private set; }
 
     private readonly List<Label> _labels = [];
     public IReadOnlyList<Label> Labels
@@ -16,11 +15,10 @@ public class Product : EntityBase
         private init => _labels = value.ToList();
     }
 
-    private Product(string title, string description, decimal price)
+    private Product(string title, string description)
     {
         Title = title;
         Description = description;
-        Price = price;
     }
 
     public void AddLabel(Label label)
@@ -42,8 +40,8 @@ public class Product : EntityBase
         }
     }
 
-    public static Product Create(string title, string description, decimal price)
+    public static Product Create(string title, string description)
     {
-        return new Product(title, description, price);
+        return new Product(title, description);
     }
 }

@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DealUp.Database.Migrations
 {
     [DbContext(typeof(PostgresqlContext))]
-    [Migration("20250323153257_AddAdvertisementDomain")]
-    partial class AddAdvertisementDomain
+    [Migration("20250323222737_AddInitialMigration")]
+    partial class AddInitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,10 +51,8 @@ namespace DealUp.Database.Migrations
                 {
                     b.HasBaseType("DealUp.Domain.Abstractions.EntityBase");
 
-                    b.Property<string>("Photos")
-                        .IsRequired()
-                        .IsUnicode(true)
-                        .HasColumnType("text");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("SellerId")
                         .HasColumnType("uuid");
@@ -93,6 +91,8 @@ namespace DealUp.Database.Migrations
                                 .HasColumnType("integer");
                         });
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("SellerId");
 
                     b.ToTable("Advertisement");
@@ -102,21 +102,30 @@ namespace DealUp.Database.Migrations
                 {
                     b.HasBaseType("DealUp.Domain.Abstractions.EntityBase");
 
-                    b.Property<Guid>("AdvertisementId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasIndex("AdvertisementId")
-                        .IsUnique();
-
                     b.ToTable("AdvertisementCategory");
+                });
+
+            modelBuilder.Entity("DealUp.Domain.Advertisement.AdvertisementPhoto", b =>
+                {
+                    b.HasBaseType("DealUp.Domain.Abstractions.EntityBase");
+
+                    b.Property<Guid>("AdvertisementId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasIndex("AdvertisementId");
+
+                    b.ToTable("AdvertisementPhoto");
                 });
 
             modelBuilder.Entity("DealUp.Domain.Advertisement.Product", b =>
@@ -208,21 +217,29 @@ namespace DealUp.Database.Migrations
 
             modelBuilder.Entity("DealUp.Domain.Advertisement.Advertisement", b =>
                 {
+                    b.HasOne("DealUp.Domain.Advertisement.AdvertisementCategory", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("DealUp.Domain.Seller.SellerProfile", "Seller")
                         .WithMany("Advertisements")
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("DealUp.Domain.Advertisement.AdvertisementCategory", b =>
+            modelBuilder.Entity("DealUp.Domain.Advertisement.AdvertisementPhoto", b =>
                 {
                     b.HasOne("DealUp.Domain.Advertisement.Advertisement", null)
-                        .WithOne("Category")
-                        .HasForeignKey("DealUp.Domain.Advertisement.AdvertisementCategory", "AdvertisementId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany("Photos")
+                        .HasForeignKey("AdvertisementId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -259,8 +276,7 @@ namespace DealUp.Database.Migrations
 
             modelBuilder.Entity("DealUp.Domain.Advertisement.Advertisement", b =>
                 {
-                    b.Navigation("Category")
-                        .IsRequired();
+                    b.Navigation("Photos");
 
                     b.Navigation("Product")
                         .IsRequired();

@@ -12,12 +12,7 @@ public class AdvertisementConfiguration : IEntityTypeConfiguration<Advertisement
         builder.Property(x => x.Status)
             .HasConversion<string>();
 
-        builder.Property(x => x.Photos)
-            .UsePropertyAccessMode(PropertyAccessMode.Field)
-            .HasJsonConversion();
-
         builder.Property(x => x.Tags)
-            .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasJsonConversion();
 
         builder.ComplexProperty(x => x.Location);
@@ -29,10 +24,9 @@ public class AdvertisementConfiguration : IEntityTypeConfiguration<Advertisement
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
-        builder.HasOne(x => x.Category)
+        builder.HasMany(x => x.Photos)
             .WithOne()
-            .HasForeignKey<AdvertisementCategory>()
-            .OnDelete(DeleteBehavior.Restrict)
+            .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
     }
 }

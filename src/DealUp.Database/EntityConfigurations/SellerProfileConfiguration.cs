@@ -14,13 +14,9 @@ public class SellerProfileConfiguration : IEntityTypeConfiguration<SellerProfile
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
-        builder
-            .HasMany(x => x.Advertisements)
+        builder.HasMany(x => x.Advertisements)
             .WithOne(x => x.Seller)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-
-        var advertisementsNavigation = builder.Metadata.FindNavigation(nameof(SellerProfile.Advertisements))!;
-        advertisementsNavigation.SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

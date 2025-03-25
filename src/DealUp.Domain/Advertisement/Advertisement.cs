@@ -4,14 +4,25 @@ using DealUp.Domain.Seller;
 
 namespace DealUp.Domain.Advertisement;
 
+/*
+ * Нахуй категорії
+ *
+ * Залишаємо теги
+ * Залишаємо лейбли в продукті (колір, стан і т.д.)
+ * Додаємо лейбли в оголошення (зробимо словник, подумати про типи, додати методи для отримання дефолтних лейблів (ціна, локація і подумати))
+ *
+ * !!! Теги і лейбли винести нахуй в окремі таблиці !!!
+ *
+ */
 public class Advertisement : EntityBase
 {
     public SellerProfile Seller { get; private init; } = null!;
     public Product Product { get; private init; } = null!;
     public Location Location { get; private init; } = null!;
     public AttendanceStatistics Statistics { get; private init; } = null!;
-    public AdvertisementCategory Category { get; private init; } = null!;
     public AdvertisementStatus Status { get; private set; }
+
+    // public decimal Price { get; private set; } // TODO:
 
     private readonly List<AdvertisementPhoto> _photos = [];
     public IReadOnlyCollection<AdvertisementPhoto> Photos
@@ -49,7 +60,12 @@ public class Advertisement : EntityBase
         }
     }
 
-    public static Advertisement CreateNew(SellerProfile seller, Product product, Location location, List<AdvertisementPhoto> photos, List<Tag> tags)
+    public static Advertisement CreateNew(
+        SellerProfile seller,
+        Product product,
+        Location location,
+        List<AdvertisementPhoto> photos,
+        List<Tag> tags)
     {
         return new Advertisement(AdvertisementStatus.Active)
         {

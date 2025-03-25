@@ -1,4 +1,6 @@
-﻿using DealUp.Domain.Seller;
+﻿using DealUp.Domain.Advertisement;
+using DealUp.Domain.Advertisement.Values;
+using DealUp.Domain.Seller;
 using DealUp.Domain.User;
 using DealUp.Domain.User.Values;
 using DealUp.Infrastructure.Configuration;
@@ -26,6 +28,7 @@ public static class ConfigureServicesExtensions
                 {
                     var adminUser = await context.CreateAdminUserAsync(cancellationToken);
                     var adminSeller = await context.CreateAdminSellerAsync(adminUser, cancellationToken);
+                    var advertisement = await context.CreateAdvertisementAsync(adminSeller, cancellationToken);
                 });
         });
     }
@@ -56,5 +59,22 @@ public static class ConfigureServicesExtensions
         }
 
         return adminSeller;
+    }
+
+    private static async Task<Advertisement> CreateAdvertisementAsync(this DbContext context, SellerProfile seller, CancellationToken cancellationToken)
+    {
+        await context.Set<Advertisement>().ExecuteDeleteAsync(cancellationToken);
+
+        var product = Product.Create("iPhone 11 Pro", "Not new");
+        var location = Location.Create(50.4504m, 30.5245m);
+
+        List<AdvertisementPhoto> advertisementPhotos = [AdvertisementPhoto.CreateFromUrl("https://localhost:8080/api/v1/photos/icon.png")];
+        List<Tag> tags = [Tag.Create("30-day return policy")];
+
+        var advertisement = Advertisement.CreateNew(seller, product, location, advertisementPhotos, tags);
+        await context.Set<Advertisement>().AddAsync(advertisement, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
+
+        return advertisement;
     }
 }
