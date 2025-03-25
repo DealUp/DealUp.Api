@@ -1,21 +1,22 @@
+using DealUp.Domain.Abstractions;
 using DealUp.Domain.Identity;
 
 namespace DealUp.Domain.User;
 
-public class User(Guid? id, string username, string? password, UserVerificationStatus status) : Entity(id)
+public class User(string username, string? password, UserVerificationStatus status) : EntityBase
 {
     public string Username { get; private set; } = username;
     public string? Password { get; private set; } = password;
     public UserVerificationStatus Status { get; private set; } = status;
 
-    private User(string username, string? password, UserVerificationStatus status) : this(Guid.CreateVersion7(), username, password, status)
-    {
-        
-    }
-
     public bool IsMatchingPassword(Credentials credentials)
     {
         return Password == credentials.Password;
+    }
+
+    public void Confirm()
+    {
+        Status = UserVerificationStatus.Confirmed;
     }
 
     public static User CreateNew(string username, string? password)

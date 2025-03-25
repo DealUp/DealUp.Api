@@ -12,7 +12,7 @@ public static class ConfigureServicesExtensions
     {
         builder.Services.Configure<DatabaseOptions>(builder.Configuration.GetSection(DatabaseOptions.SectionName));
 
-        return builder.Services.AddDbContext<DatabaseContext>((serviceProvider, options) =>
+        return builder.Services.AddDbContext<PostgresqlContext>((serviceProvider, options) =>
         {
             var databaseOptions = serviceProvider.GetRequiredService<IOptions<DatabaseOptions>>();
             options.UseNpgsql(databaseOptions.Value.ConnectionString);
