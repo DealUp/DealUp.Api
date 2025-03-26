@@ -57,7 +57,7 @@ public static class ConfigureServicesExtensions
 
         if (adminSeller is null)
         {
-            adminSeller = SellerProfile.CreateNew(user);
+            adminSeller = SellerProfile.CreateNew(user.Id);
             await context.AddAsync(adminSeller, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
         }

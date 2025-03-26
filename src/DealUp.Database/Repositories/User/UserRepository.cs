@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using DealUp.Domain.User;
+﻿using DealUp.Domain.User;
 using DealUp.Domain.User.Interfaces;
 using DealUp.Domain.User.Values;
 using Microsoft.EntityFrameworkCore;
