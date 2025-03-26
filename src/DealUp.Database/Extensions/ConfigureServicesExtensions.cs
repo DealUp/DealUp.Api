@@ -20,20 +20,20 @@ public static class ConfigureServicesExtensions
     {
         return builder.Services.AddDbContext<IDatabaseContext, PostgresqlContext>(options =>
         {
+            options.UseNpgsql(builder.Configuration.GetConnectionString(ConfigurationConstants.DatabaseSectionName));
+
             if (builder.Environment.IsDevelopment())
             {
-                options.EnableSensitiveDataLogging();
+                options
+                    .EnableSensitiveDataLogging()
+                    .UseAsyncSeeding(async (context, _, cancellationToken) =>
+                    {
+                        var adminUser = await context.CreateAdminUserAsync(cancellationToken);
+                        var adminSeller = await context.CreateAdminSellerAsync(adminUser, cancellationToken);
+                        var labels = await context.CreateLabelsAsync(cancellationToken);
+                        var advertisement = await context.CreateAdvertisementAsync(adminSeller, cancellationToken);
+                    });
             }
-
-            options
-                .UseNpgsql(builder.Configuration.GetConnectionString(ConfigurationConstants.DatabaseSectionName))
-                .UseAsyncSeeding(async (context, _, cancellationToken) =>
-                {
-                    var adminUser = await context.CreateAdminUserAsync(cancellationToken);
-                    var adminSeller = await context.CreateAdminSellerAsync(adminUser, cancellationToken);
-                    var labels = await context.CreateLabelsAsync(cancellationToken);
-                    var advertisement = await context.CreateAdvertisementAsync(adminSeller, cancellationToken);
-                });
         });
     }
 
