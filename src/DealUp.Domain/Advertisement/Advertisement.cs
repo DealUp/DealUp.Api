@@ -4,35 +4,31 @@ using DealUp.Domain.Seller;
 
 namespace DealUp.Domain.Advertisement;
 
-/*
- * Нахуй категорії
- *
- * Залишаємо теги
- * Залишаємо лейбли в продукті (колір, стан і т.д.)
- * Додаємо лейбли в оголошення (зробимо словник, подумати про типи, додати методи для отримання дефолтних лейблів (ціна, локація і подумати))
- *
- * !!! Теги і лейбли винести нахуй в окремі таблиці !!!
- *
- */
 public class Advertisement : EntityBase
 {
+    private readonly List<AdvertisementPhoto> _photos = [];
+    private readonly List<Label> _labels = [];
+    private readonly List<Tag> _tags = [];
+
+    public AdvertisementStatus Status { get; private set; }
     public SellerProfile Seller { get; private init; } = null!;
     public Product Product { get; private init; } = null!;
     public Location Location { get; private init; } = null!;
     public AttendanceStatistics Statistics { get; private init; } = null!;
-    public AdvertisementStatus Status { get; private set; }
 
-    // public decimal Price { get; private set; } // TODO:
-
-    private readonly List<AdvertisementPhoto> _photos = [];
     public IReadOnlyCollection<AdvertisementPhoto> Photos
     {
         get => _photos.AsReadOnly();
         private init => _photos = value.ToList();
     }
 
-    private readonly List<Tag> _tags = [];
-    public IReadOnlyList<Tag> Tags
+    public IReadOnlyCollection<Label> Labels
+    {
+        get => _labels.AsReadOnly();
+        private init => _labels = value.ToList();
+    }
+
+    public IReadOnlyCollection<Tag> Tags
     {
         get => _tags.AsReadOnly();
         private init => _tags = value.ToList();
@@ -53,7 +49,7 @@ public class Advertisement : EntityBase
 
     public void RemoveTag(string tagName)
     {
-        var tag = _tags.FirstOrDefault(t => t.Name == tagName);
+        var tag = _tags.FirstOrDefault(t => t.Value == tagName);
         if (tag is not null)
         {
             _tags.Remove(tag);

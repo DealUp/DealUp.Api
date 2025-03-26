@@ -1,15 +1,15 @@
 ﻿using DealUp.Domain.Abstractions;
-using DealUp.Domain.Advertisement.Values;
 
 namespace DealUp.Domain.Advertisement;
 
 public class Product : EntityBase
 {
+    private readonly List<Label> _labels = [];
+
     public string Title { get; private set; }
     public string Description { get; private set; }
 
-    private readonly List<Label> _labels = [];
-    public IReadOnlyList<Label> Labels
+    public IReadOnlyCollection<Label> Labels
     {
         get => _labels.AsReadOnly();
         private init => _labels = value.ToList();

@@ -1,5 +1,4 @@
-﻿using DealUp.Database.Extensions;
-using DealUp.Domain.Advertisement;
+﻿using DealUp.Domain.Advertisement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,9 +10,6 @@ public class AdvertisementConfiguration : IEntityTypeConfiguration<Advertisement
     {
         builder.Property(x => x.Status)
             .HasConversion<string>();
-
-        builder.Property(x => x.Tags)
-            .HasJsonConversion();
 
         builder.ComplexProperty(x => x.Location);
         builder.ComplexProperty(x => x.Statistics);
@@ -28,5 +24,11 @@ public class AdvertisementConfiguration : IEntityTypeConfiguration<Advertisement
             .WithOne()
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
+
+        builder.HasMany(x => x.Labels)
+            .WithMany(x => x.Advertisements);
+
+        builder.HasMany(x => x.Tags)
+            .WithMany(x => x.Advertisements);
     }
 }

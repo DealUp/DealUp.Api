@@ -1,5 +1,4 @@
-﻿using DealUp.Database.Extensions;
-using DealUp.Domain.Advertisement;
+﻿using DealUp.Domain.Advertisement;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,7 +11,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Title);
         builder.Property(x => x.Description);
 
-        builder.Property(x => x.Labels)
-            .HasJsonConversion();
+        builder.HasMany(x => x.Labels)
+            .WithMany(x => x.Products);
     }
 }
