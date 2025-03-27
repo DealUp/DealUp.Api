@@ -1,11 +1,14 @@
+using DealUp.Database.Repositories.Advertisement;
 using DealUp.Database.Repositories.Seller;
 using DealUp.Database.Repositories.User;
+using DealUp.Domain.Advertisement.Interfaces;
 using DealUp.Domain.Email.Interfaces;
 using DealUp.Domain.Identity.Interfaces;
 using DealUp.Domain.Seller.Interfaces;
 using DealUp.Domain.User.Interfaces;
 using DealUp.EmailSender.Extensions;
 using DealUp.Infrastructure.Handlers;
+using DealUp.Services.Advertisement;
 using DealUp.Services.Email;
 using DealUp.Services.Identity;
 using DealUp.Services.Identity.SsoProviders;
@@ -23,7 +26,8 @@ public static class ConfigureServicesExtensions
             .AddIdentityServices()
             .AddUserServices()
             .AddEmailSendingServices(configuration)
-            .AddSellerServices();
+            .AddSellerServices()
+            .AddAdvertisementServices();
     }
 
     private static IServiceCollection AddIdentityServices(this IServiceCollection serviceCollection)
@@ -62,5 +66,12 @@ public static class ConfigureServicesExtensions
         return serviceCollection
             .AddTransient<ISellerService, SellerService>()
             .AddTransient<ISellerRepository, SellerRepository>();
+    }
+
+    private static IServiceCollection AddAdvertisementServices(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection
+            .AddTransient<IAdvertisementService, AdvertisementService>()
+            .AddTransient<IAdvertisementRepository, AdvertisementRepository>();
     }
 }

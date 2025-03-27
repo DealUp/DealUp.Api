@@ -31,8 +31,7 @@ public class Label : EntityBase
             throw new InvalidOperationException($"Type {ValueType} is not supported.");
         }
 
-        var typedValue = Value.Deserialize(targetType)!;
-        return (TValue)typedValue;
+        return Value.Deserialize<TValue>()!;
     }
 
     public static Label Create(string name, object value)

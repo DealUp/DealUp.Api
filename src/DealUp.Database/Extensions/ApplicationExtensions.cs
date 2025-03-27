@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DealUp.Database.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -9,7 +9,7 @@ public static class ApplicationExtensions
     public static async Task ExecuteMigrationsAsync(this IHost application)
     {
         using var serviceScope = application.Services.CreateScope();
-        var databaseContext = serviceScope.ServiceProvider.GetRequiredService<PostgresqlContext>();
-        await databaseContext.Database.MigrateAsync();
+        var databaseContext = serviceScope.ServiceProvider.GetRequiredService<IDatabaseContext>();
+        await databaseContext.MigrateAsync();
     }
 }

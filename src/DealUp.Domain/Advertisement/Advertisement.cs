@@ -39,6 +39,31 @@ public class Advertisement : EntityBase
         Status = status;
     }
 
+    public Advertisement(DateTime createdAt, Product product, Location location, IReadOnlyCollection<AdvertisementPhoto> photos, IReadOnlyCollection<Tag> tags)
+    {
+        CreatedAt = createdAt;
+        Product = product;
+        Location = location;
+        Photos = photos;
+        Tags = tags;
+    }
+
+    public AdvertisementPhoto? GetFirstPhotoOrDefault()
+    {
+        return Photos.FirstOrDefault();
+    }
+
+    public decimal GetPrice()
+    {
+        var priceLabel = _labels.Single(label => label.Name == "price"); // TODO: store default label names?
+        return priceLabel.GetLabelValue<decimal>();
+    }
+
+    public List<string> ExtractTagValues()
+    {
+        return _tags.Select(tag => tag.Value).ToList();
+    }
+
     public void AddTag(Tag tag)
     {
         if (!_tags.Contains(tag))
