@@ -4,9 +4,9 @@ using DealUp.Domain.Seller;
 
 namespace DealUp.Domain.Advertisement;
 
-public class Advertisement : EntityBase
+public class Advertisement : AuditableEntityBase
 {
-    private readonly List<AdvertisementPhoto> _photos = [];
+    private readonly List<AdvertisementMedia> _mediaFiles = [];
     private readonly List<Label> _labels = [];
     private readonly List<Tag> _tags = [];
 
@@ -16,10 +16,10 @@ public class Advertisement : EntityBase
     public Location Location { get; private init; } = null!;
     public AttendanceStatistics Statistics { get; private init; } = null!;
 
-    public IReadOnlyCollection<AdvertisementPhoto> Photos
+    public IReadOnlyCollection<AdvertisementMedia> MediaFiles
     {
-        get => _photos.AsReadOnly();
-        private init => _photos = value.ToList();
+        get => _mediaFiles.AsReadOnly();
+        private init => _mediaFiles = value.ToList();
     }
 
     public IReadOnlyCollection<Label> Labels
@@ -39,18 +39,18 @@ public class Advertisement : EntityBase
         Status = status;
     }
 
-    public Advertisement(DateTime createdAt, Product product, Location location, IReadOnlyCollection<AdvertisementPhoto> photos, IReadOnlyCollection<Tag> tags)
+    public Advertisement(DateTime createdAt, Product product, Location location, IReadOnlyCollection<AdvertisementMedia> mediaFiles, IReadOnlyCollection<Tag> tags)
     {
         CreatedAt = createdAt;
         Product = product;
         Location = location;
-        Photos = photos;
+        MediaFiles = mediaFiles;
         Tags = tags;
     }
 
-    public AdvertisementPhoto? GetFirstPhotoOrDefault()
+    public AdvertisementMedia? GetFirstMedia()
     {
-        return Photos.FirstOrDefault();
+        return MediaFiles.FirstOrDefault();
     }
 
     public decimal GetPrice()
@@ -81,20 +81,13 @@ public class Advertisement : EntityBase
         }
     }
 
-    public static Advertisement CreateNew(
-        SellerProfile seller,
-        Product product,
-        Location location,
-        List<AdvertisementPhoto> photos,
-        List<Tag> tags)
+    public static Advertisement CreateNew(SellerProfile seller, Product product, Location location)
     {
         return new Advertisement(AdvertisementStatus.Active)
         {
             Seller = seller,
             Product = product,
             Location = location,
-            Photos = photos,
-            Tags = tags,
             Statistics = AttendanceStatistics.CreateNew()
         };
     }

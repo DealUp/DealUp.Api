@@ -2,7 +2,7 @@
 
 namespace DealUp.Domain.Advertisement;
 
-public class Product : EntityBase
+public class Product : AuditableEntityBase
 {
     private readonly List<Label> _labels = [];
 

@@ -11,7 +11,11 @@ public class AdvertisementConfiguration : IEntityTypeConfiguration<Advertisement
         builder.Property(x => x.Status)
             .HasConversion<string>();
 
-        builder.ComplexProperty(x => x.Location);
+        builder.ComplexProperty(
+            x => x.Location,
+            nestedObject => nestedObject.Property(x => x.Coordinates)
+                .HasColumnType("geography (point,4326)"));
+
         builder.ComplexProperty(x => x.Statistics);
 
         builder.HasOne(x => x.Product)
@@ -20,7 +24,7 @@ public class AdvertisementConfiguration : IEntityTypeConfiguration<Advertisement
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
-        builder.HasMany(x => x.Photos)
+        builder.HasMany(x => x.MediaFiles)
             .WithOne()
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();

@@ -1,4 +1,5 @@
-﻿using DealUp.Database.Interfaces;
+﻿using DealUp.Database.Extensions;
+using DealUp.Database.Interfaces;
 using DealUp.Domain.Advertisement.Interfaces;
 using DealUp.Domain.Common;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,10 @@ public class AdvertisementRepository(IDatabaseContext databaseContext) : IAdvert
                 advertisement.CreatedAt,
                 advertisement.Product,
                 advertisement.Location,
-                advertisement.Photos,
+                advertisement.MediaFiles,
                 advertisement.Tags))
             .OrderByDescending(advertisement => advertisement.CreatedAt)
-            .Skip(pagination.SkipCount)
-            .Take(pagination.PageSize)
+            .PaginateWithOffset(pagination)
             .Future();
 
         var futureCount = databaseContext.Set<AdvertisementDomain>().DeferredCount().FutureValue();

@@ -1,18 +1,19 @@
-﻿namespace DealUp.Domain.Advertisement.Values;
+﻿using NetTopologySuite.Geometries;
+
+namespace DealUp.Domain.Advertisement.Values;
 
 public record Location
 {
-    public decimal Longitude { get; private set; }
-    public decimal Latitude { get; private set; }
+    public Point Coordinates { get; private set; }
 
-    private Location(decimal longitude, decimal latitude)
+    private Location(Point coordinates)
     {
-        Longitude = longitude;
-        Latitude = latitude;
+        Coordinates = coordinates;
     }
 
-    public static Location Create(decimal longitude, decimal latitude)
+    public static Location Create(double longitude, double latitude)
     {
-        return new Location(longitude, latitude);
+        var point = new Point(longitude, latitude) { SRID = 4326 };
+        return new Location(point);
     }
 }

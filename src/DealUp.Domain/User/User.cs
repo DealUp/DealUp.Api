@@ -4,7 +4,7 @@ using DealUp.Domain.User.Values;
 
 namespace DealUp.Domain.User;
 
-public class User : EntityBase
+public class User : AuditableEntityBase
 {
     public string Username { get; private set; }
     public string? Password { get; private set; }
