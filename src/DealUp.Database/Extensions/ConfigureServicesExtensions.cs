@@ -104,9 +104,10 @@ public static class ConfigureServicesExtensions
         var location = Location.Create(50.4504d, 30.5245d);
 
         List<AdvertisementMedia> mediaFiles = [AdvertisementMedia.CreateFromUrl("https://localhost:8080/api/v1/photos/icon.png", MediaType.Picture)];
+        List<Label> labels = [Label.Create("price", 199.99m)];
         List<Tag> tags = [Tag.Create("30-day return policy")];
 
-        var advertisement = Advertisement.CreateNew(seller, product, location);
+        var advertisement = Advertisement.CreateNew(seller, product, location, labels);
         await context.AddAsync(advertisement, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
 

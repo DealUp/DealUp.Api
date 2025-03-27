@@ -17,6 +17,12 @@ public class CreateAdvertisementRequest
         Tags = tags;
     }
 
+    public List<Label> GetLabelsToCreate(List<Label> existingLabels)
+    {
+        var existingLabelValues = existingLabels.Select(label => new { label.Name, label.Value });
+        return Labels.ExceptBy(existingLabelValues, label => new { label.Name, label.Value }).ToList();
+    }
+
     public static CreateAdvertisementRequest Create(Product product, Location location, List<Label> labels, List<Tag> tags)
     {
         return new CreateAdvertisementRequest(product, location, labels, tags);

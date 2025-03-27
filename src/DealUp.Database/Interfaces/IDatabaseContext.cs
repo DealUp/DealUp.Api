@@ -10,4 +10,6 @@ public interface IDatabaseContext : IDisposable
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     public DbSet<TEntity> Set<TEntity>() where TEntity : EntityBase;
     public ValueTask<EntityEntry<TEntity>> AddAsync<TEntity>(TEntity entity, CancellationToken cancellationToken = default) where TEntity : EntityBase;
+    public Task AddRangeAsync<TEntity>(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default) where TEntity : EntityBase;
+    public ValueTask<EntityEntry<TEntity>> UpdateAsync<TEntity>(TEntity entity) where TEntity : EntityBase;
 }

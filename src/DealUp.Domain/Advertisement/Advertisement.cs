@@ -81,13 +81,14 @@ public class Advertisement : AuditableEntityBase
         }
     }
 
-    public static Advertisement CreateNew(SellerProfile seller, Product product, Location location)
+    public static Advertisement CreateNew(SellerProfile seller, Product product, Location location, List<Label> labels)
     {
         return new Advertisement(AdvertisementStatus.Active)
         {
             Seller = seller,
             Product = product,
             Location = location,
+            Labels = labels,
             Statistics = AttendanceStatistics.CreateNew()
         };
     }

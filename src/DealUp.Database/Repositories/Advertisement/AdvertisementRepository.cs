@@ -1,5 +1,6 @@
 ﻿using DealUp.Database.Extensions;
 using DealUp.Database.Interfaces;
+using DealUp.Domain.Advertisement;
 using DealUp.Domain.Advertisement.Interfaces;
 using DealUp.Domain.Common;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,13 @@ namespace DealUp.Database.Repositories.Advertisement;
 
 public class AdvertisementRepository(IDatabaseContext databaseContext) : IAdvertisementRepository
 {
+    public async Task<AdvertisementDomain> CreateAdvertisementAsync(AdvertisementDomain advertisement)
+    {
+        await databaseContext.AddAsync(advertisement);
+        await databaseContext.SaveChangesAsync();
+        return advertisement;
+    }
+
     public async Task<PagedResponse<AdvertisementDomain>> GetAllAdvertisementsAsync(PaginationParameters pagination)
     {
         var futureAdvertisements = databaseContext.Set<AdvertisementDomain>()
@@ -29,5 +37,20 @@ public class AdvertisementRepository(IDatabaseContext databaseContext) : IAdvert
         var totalCount = await futureCount.ValueAsync();
 
         return PagedResponse<AdvertisementDomain>.Create(advertisements, pagination, totalCount);
+    }
+
+    public async Task<List<Label>> GetExistingLabelsAsync(List<Label> labelsToCheck)
+    {
+        return await databaseContext.Set<Label>()
+            .Where(label => labelsToCheck.Select(labelToCheck => labelToCheck.Name).Contains(label.Name))
+            .Where(label => labelsToCheck.Select(labelToCheck => labelToCheck.Value).Contains(label.Value))
+            .ToListAsync();
+    }
+
+    public async Task<List<Label>> CreateLabelsAsync(List<Label> labels)
+    {
+        await databaseContext.AddRangeAsync(labels);
+        await databaseContext.SaveChangesAsync();
+        return labels;
     }
 }
