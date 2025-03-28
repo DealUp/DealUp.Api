@@ -13,7 +13,7 @@ public class GoogleSsoService(
     IHttpContextService httpContextService,
     IAuthService authService,
     IUserRepository userRepository,
-    IOptions<OauthOptions> options)
+    IOptions<OAuthOptions> options)
     : ISsoProviderService
 {
     public string AuthenticationScheme => GoogleDefaults.AuthenticationScheme;

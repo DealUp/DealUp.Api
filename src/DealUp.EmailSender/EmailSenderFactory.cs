@@ -1,4 +1,5 @@
-﻿using DealUp.EmailSender.Interfaces;
+﻿using DealUp.EmailSender.Configuration;
+using DealUp.EmailSender.Interfaces;
 using DealUp.Infrastructure.Configuration;
 using Microsoft.Extensions.Options;
 

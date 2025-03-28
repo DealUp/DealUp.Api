@@ -1,6 +1,7 @@
 using DealUp.Database.Repositories.Advertisement;
 using DealUp.Database.Repositories.Seller;
 using DealUp.Database.Repositories.User;
+using DealUp.DataLake.Extensions;
 using DealUp.Domain.Advertisement.Interfaces;
 using DealUp.Domain.Email.Interfaces;
 using DealUp.Domain.Identity.Interfaces;
@@ -23,9 +24,10 @@ public static class ConfigureServicesExtensions
     public static IServiceCollection ConfigureServices(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         return serviceCollection
+            .AddEmailSendingServices(configuration)
+            .AddDataLake(configuration)
             .AddIdentityServices()
             .AddUserServices()
-            .AddEmailSendingServices(configuration)
             .AddSellerServices()
             .AddAdvertisementServices();
     }

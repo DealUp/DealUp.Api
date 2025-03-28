@@ -23,15 +23,15 @@ public static class AuthExtensions
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie()
-            .AddGoogle(options =>
-            {
-                var googleOptions = builder.Configuration.GetOauthOptionsSection().Get<OauthOptions>()!.GoogleProviderOptions;
-
-                options.ClientId = googleOptions.ClientId;
-                options.ClientSecret = googleOptions.ClientSecret;
-                options.CallbackPath = googleOptions.CallbackUrl;
-                options.SaveTokens = false;
-            })
+            // .AddGoogle(options =>
+            // {
+            //     var googleOptions = builder.Configuration.GetOauthOptionsSection().Get<OAuthOptions>()!.GoogleProviderOptions;
+            //
+            //     options.ClientId = googleOptions.ClientId;
+            //     options.ClientSecret = googleOptions.ClientSecret;
+            //     options.CallbackPath = googleOptions.CallbackUrl;
+            //     options.SaveTokens = false;
+            // })
             .AddJwtBearer(options =>
             {
                 var jwtOptions = builder.Configuration.GetJwtOptionsSection().Get<JwtOptions>()!;
@@ -63,7 +63,7 @@ public static class AuthExtensions
 
     public static IServiceCollection AddOauthOptions(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        return serviceCollection.Configure<OauthOptions>(configuration.GetOauthOptionsSection());
+        return serviceCollection.Configure<OAuthOptions>(configuration.GetOauthOptionsSection());
     }
 
     public static IConfigurationSection GetJwtOptionsSection(this IConfiguration configuration)
@@ -73,6 +73,6 @@ public static class AuthExtensions
 
     public static IConfigurationSection GetOauthOptionsSection(this IConfiguration configuration)
     {
-        return configuration.GetRequiredSection(OauthOptions.SectionName);
+        return configuration.GetRequiredSection(OAuthOptions.SectionName);
     }
 }

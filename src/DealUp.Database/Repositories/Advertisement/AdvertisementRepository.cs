@@ -22,12 +22,6 @@ public class AdvertisementRepository(IDatabaseContext databaseContext) : IAdvert
     {
         var futureAdvertisements = databaseContext.Set<AdvertisementDomain>()
             .AsNoTracking()
-            .Select(advertisement => new AdvertisementDomain(
-                advertisement.CreatedAt,
-                advertisement.Product,
-                advertisement.Location,
-                advertisement.MediaFiles,
-                advertisement.Tags))
             .OrderByDescending(advertisement => advertisement.CreatedAt)
             .PaginateWithOffset(pagination)
             .Future();
@@ -42,15 +36,15 @@ public class AdvertisementRepository(IDatabaseContext databaseContext) : IAdvert
     public async Task<List<Label>> GetExistingLabelsAsync(List<Label> labelsToCheck)
     {
         return await databaseContext.Set<Label>()
-            .Where(label => labelsToCheck.Select(labelToCheck => labelToCheck.Name).Contains(label.Name))
-            .Where(label => labelsToCheck.Select(labelToCheck => labelToCheck.Value).Contains(label.Value))
+            .Where(existingLabel => labelsToCheck.Select(label => label.Name).Contains(existingLabel.Name))
+            .Where(existingLabel => labelsToCheck.Select(label => label.Value).Contains(existingLabel.Value))
             .ToListAsync();
     }
 
-    public async Task<List<Label>> CreateLabelsAsync(List<Label> labels)
+    public async Task<List<Tag>> GetExistingTagsAsync(List<Tag> tagsToCheck)
     {
-        await databaseContext.AddRangeAsync(labels);
-        await databaseContext.SaveChangesAsync();
-        return labels;
+        return await databaseContext.Set<Tag>()
+            .Where(existingTag => tagsToCheck.Select(tag => tag.Value).Contains(existingTag.Value))
+            .ToListAsync();
     }
 }

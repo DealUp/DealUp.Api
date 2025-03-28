@@ -103,11 +103,11 @@ public static class ConfigureServicesExtensions
         var product = Product.Create("iPhone 11 Pro", "Not new");
         var location = Location.Create(50.4504d, 30.5245d);
 
-        List<AdvertisementMedia> mediaFiles = [AdvertisementMedia.CreateFromUrl("https://localhost:8080/api/v1/photos/icon.png", MediaType.Picture)];
+        List<AdvertisementMedia> mediaFiles = [AdvertisementMedia.CreateFromKey("uploads/icon.png", MediaType.Picture)];
         List<Label> labels = [Label.Create("price", 199.99m)];
         List<Tag> tags = [Tag.Create("30-day return policy")];
 
-        var advertisement = Advertisement.CreateNew(seller, product, location, labels);
+        var advertisement = Advertisement.CreateNew(seller, product, location, mediaFiles, labels, tags);
         await context.AddAsync(advertisement, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
 

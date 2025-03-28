@@ -29,7 +29,7 @@ public class AdvertisementController(IHttpContextService httpContextService, IAd
     public async Task<ActionResult<Guid>> CreateAdvertisement([FromBody, Required] CreateAdvertisementDto createAdvertisement)
     {
         var userId = httpContextService.GetUserIdOrThrow();
-        var advertisementId = await advertisementService.CreateAdvertisementAsync(userId, createAdvertisement.ToDomain());
+        var advertisementId = await advertisementService.CreateAdvertisementAsync(userId, Guid.Empty, createAdvertisement.ToDomain());
         return StatusCode(StatusCodes.Status201Created, advertisementId);
     }
 }

@@ -1,5 +1,6 @@
 using DealUp.Application.Api.Extensions;
 using DealUp.Database.Extensions;
+using DealUp.DataLake.Extensions;
 using DealUp.Infrastructure.Extensions;
 using DealUp.Infrastructure.Middlewares;
 

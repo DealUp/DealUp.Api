@@ -39,15 +39,6 @@ public class Advertisement : AuditableEntityBase
         Status = status;
     }
 
-    public Advertisement(DateTime createdAt, Product product, Location location, IReadOnlyCollection<AdvertisementMedia> mediaFiles, IReadOnlyCollection<Tag> tags)
-    {
-        CreatedAt = createdAt;
-        Product = product;
-        Location = location;
-        MediaFiles = mediaFiles;
-        Tags = tags;
-    }
-
     public AdvertisementMedia? GetFirstMedia()
     {
         return MediaFiles.FirstOrDefault();
@@ -64,31 +55,22 @@ public class Advertisement : AuditableEntityBase
         return _tags.Select(tag => tag.Value).ToList();
     }
 
-    public void AddTag(Tag tag)
-    {
-        if (!_tags.Contains(tag))
-        {
-            _tags.Add(tag);
-        }
-    }
-
-    public void RemoveTag(string tagName)
-    {
-        var tag = _tags.FirstOrDefault(t => t.Value == tagName);
-        if (tag is not null)
-        {
-            _tags.Remove(tag);
-        }
-    }
-
-    public static Advertisement CreateNew(SellerProfile seller, Product product, Location location, List<Label> labels)
+    public static Advertisement CreateNew(
+        SellerProfile seller,
+        Product product,
+        Location location,
+        List<AdvertisementMedia> mediaFiles,
+        List<Label> labels,
+        List<Tag> tags)
     {
         return new Advertisement(AdvertisementStatus.Active)
         {
             Seller = seller,
             Product = product,
             Location = location,
+            MediaFiles = mediaFiles,
             Labels = labels,
+            Tags = tags,
             Statistics = AttendanceStatistics.CreateNew()
         };
     }

@@ -1,5 +1,6 @@
 ﻿<Solution>
   <Folder Name="/src/">
+    <Project Path="src\DealUp.DataLake\DealUp.DataLake.csproj" Type="Classic C#" />
     <Project Path="src\DealUp.Application.Api\DealUp.Application.Api.csproj" Type="Classic C#" />
     <Project Path="src\DealUp.Constants\DealUp.Constants.csproj" Type="Classic C#" />
     <Project Path="src\DealUp.Database\DealUp.Database.csproj" Type="Classic C#" />

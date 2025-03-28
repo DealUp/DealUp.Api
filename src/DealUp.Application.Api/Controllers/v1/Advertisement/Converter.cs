@@ -19,7 +19,7 @@ public static class Converter
             Id = advertisement.Id,
             ProductName = advertisement.Product.Title,
             Price = advertisement.GetPrice(),
-            MainPhotoUrl = advertisement.GetFirstMedia()?.Url,
+            CoverMediaKey = advertisement.GetFirstMedia()?.Key,
             CreationDate = advertisement.CreatedAt,
             Tags = advertisement.ExtractTagValues()
         };

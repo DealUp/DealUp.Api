@@ -1,6 +1,6 @@
+using DealUp.EmailSender.Configuration;
 using DealUp.EmailSender.Interfaces;
 using DealUp.EmailSender.Providers;
-using DealUp.Infrastructure.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Resend;
@@ -13,8 +13,8 @@ public static class ConfigureServicesExtensions
     {
         return serviceCollection
             .Configure<EmailSendingOptions>(configuration.GetSection(EmailSendingOptions.SectionName))
-            .AddTransient<IEmailSenderFactory, EmailSenderFactory>()
-            .AddTransient<IEmailSender, ResendEmailSender>()
+            .AddScoped<IEmailSenderFactory, EmailSenderFactory>()
+            .AddScoped<IEmailSender, ResendEmailSender>()
             .AddResendClient(configuration);
     }
 

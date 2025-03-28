@@ -8,7 +8,7 @@ public class AdvertisementMediaConfiguration : IEntityTypeConfiguration<Advertis
 {
     public void Configure(EntityTypeBuilder<AdvertisementMedia> builder)
     {
-        builder.Property(x => x.Url);
+        builder.Property(x => x.Key);
         builder.Property(x => x.Type)
             .HasConversion<string>();
     }

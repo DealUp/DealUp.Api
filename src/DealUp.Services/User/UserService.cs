@@ -2,6 +2,7 @@
 using DealUp.Domain.User;
 using DealUp.Domain.User.Interfaces;
 using DealUp.Domain.User.Values;
+using DealUp.EmailSender.Configuration;
 using DealUp.Exceptions;
 using DealUp.Infrastructure.Configuration;
 using DealUp.Utils;

@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DealUp.DataLake\DealUp.DataLake.csproj" />
-      <ProjectReference Include="..\DealUp.Domain\DealUp.Domain.csproj" />
-      <ProjectReference Include="..\DealUp.EmailSender\DealUp.EmailSender.csproj" />
-      <ProjectReference Include="..\DealUp.Exceptions\DealUp.Exceptions.csproj" />
       <ProjectReference Include="..\DealUp.Infrastructure\DealUp.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AWSSDK.S3" Version="3.7.415.27" />
     </ItemGroup>
 
 </Project>
