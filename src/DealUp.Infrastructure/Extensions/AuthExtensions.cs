@@ -23,15 +23,15 @@ public static class AuthExtensions
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie()
-            // .AddGoogle(options =>
-            // {
-            //     var googleOptions = builder.Configuration.GetOauthOptionsSection().Get<OAuthOptions>()!.GoogleProviderOptions;
-            //
-            //     options.ClientId = googleOptions.ClientId;
-            //     options.ClientSecret = googleOptions.ClientSecret;
-            //     options.CallbackPath = googleOptions.CallbackUrl;
-            //     options.SaveTokens = false;
-            // })
+            .AddGoogle(options =>
+            {
+                var googleOptions = builder.Configuration.GetOauthOptionsSection().Get<OAuthOptions>()!.GoogleProviderOptions;
+
+                options.ClientId = googleOptions.ClientId;
+                options.ClientSecret = googleOptions.ClientSecret;
+                options.CallbackPath = googleOptions.CallbackUrl;
+                options.SaveTokens = false;
+            })
             .AddJwtBearer(options =>
             {
                 var jwtOptions = builder.Configuration.GetJwtOptionsSection().Get<JwtOptions>()!;
