@@ -1,4 +1,4 @@
-﻿using DealUp.Domain.User;
+﻿using DealUp.Domain.User.Values;
 using DealUp.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,13 +1,21 @@
 ﻿using DealUp.Domain.Abstractions;
+using DealUp.Domain.User.Values;
 
 namespace DealUp.Domain.User;
 
-public class UserPendingConfirmation(User user, ConfirmationType type, string token, bool isUsed) : EntityBase
+public class UserPendingConfirmation : EntityBase
 {
-    public User User { get; private init; } = user;
-    public ConfirmationType Type { get; private set; } = type;
-    public string Token { get; private set; } = token;
-    public bool IsUsed { get; private set; } = isUsed;
+    public User User { get; private init; } = null!;
+    public ConfirmationType Type { get; private set; }
+    public string Token { get; private set; }
+    public bool IsUsed { get; private set; }
+
+    private UserPendingConfirmation(ConfirmationType type, string token, bool isUsed)
+    {
+        Type = type;
+        Token = token;
+        IsUsed = isUsed;
+    }
 
     public bool IsRecent()
     {
@@ -28,12 +36,9 @@ public class UserPendingConfirmation(User user, ConfirmationType type, string to
 
     public static UserPendingConfirmation CreateForEmailVerification(User user, string token)
     {
-        return new UserPendingConfirmation(user, ConfirmationType.VerifyEmail, token, isUsed: false);
+        return new UserPendingConfirmation(ConfirmationType.VerifyEmail, token, isUsed: false)
+        {
+            User = user
+        };
     }
-}
-
-public enum ConfirmationType
-{
-    VerifyEmail = 1,
-    ResetPassword
 }

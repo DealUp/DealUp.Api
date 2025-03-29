@@ -1,4 +1,4 @@
-﻿using DealUp.Domain.User;
+﻿using DealUp.Domain.User.Values;
 using Microsoft.AspNetCore.Authorization;
 
 namespace DealUp.Infrastructure.Requirements;

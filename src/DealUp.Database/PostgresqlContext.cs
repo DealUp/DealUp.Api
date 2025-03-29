@@ -21,11 +21,6 @@ public class PostgresqlContext(DbContextOptions<PostgresqlContext> options) : Db
 
     public new Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        foreach (var entity in ChangeTracker.Entries<EntityBase>().Where(x => x.State == EntityState.Modified))
-        {
-            entity.Property(nameof(EntityBase.ModifiedAt)).CurrentValue = DateTime.UtcNow;
-        }
-
         return base.SaveChangesAsync(cancellationToken);
     }
 

@@ -1,0 +1,14 @@
+﻿<Solution>
+  <Folder Name="/src/">
+    <Project Path="src\DealUp.Application.Api\DealUp.Application.Api.csproj" Type="Classic C#" />
+    <Project Path="src\DealUp.Constants\DealUp.Constants.csproj" Type="Classic C#" />
+    <Project Path="src\DealUp.Database\DealUp.Database.csproj" Type="Classic C#" />
+    <Project Path="src\DealUp.Domain\DealUp.Domain.csproj" Type="Classic C#" />
+    <Project Path="src\DealUp.Dto\DealUp.Dto.csproj" Type="Classic C#" />
+    <Project Path="src\DealUp.EmailSender\DealUp.EmailSender.csproj" Type="Classic C#" />
+    <Project Path="src\DealUp.Exceptions\DealUp.Exceptions.csproj" Type="Classic C#" />
+    <Project Path="src\DealUp.Infrastructure\DealUp.Infrastructure.csproj" Type="Classic C#" />
+    <Project Path="src\DealUp.Services\DealUp.Services.csproj" Type="Classic C#" />
+    <Project Path="src\DealUp.Utils\DealUp.Utils.csproj" Type="Classic C#" />
+  </Folder>
+</Solution>

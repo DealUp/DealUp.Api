@@ -1,13 +1,21 @@
 using DealUp.Domain.Abstractions;
 using DealUp.Domain.Identity;
+using DealUp.Domain.User.Values;
 
 namespace DealUp.Domain.User;
 
-public class User(string username, string? password, UserVerificationStatus status) : EntityBase
+public class User : EntityBase
 {
-    public string Username { get; private set; } = username;
-    public string? Password { get; private set; } = password;
-    public UserVerificationStatus Status { get; private set; } = status;
+    public string Username { get; private set; }
+    public string? Password { get; private set; }
+    public UserVerificationStatus Status { get; private set; }
+
+    private User(string username, string? password, UserVerificationStatus status)
+    {
+        Username = username;
+        Password = password;
+        Status = status;
+    }
 
     public bool IsMatchingPassword(Credentials credentials)
     {
@@ -23,10 +31,9 @@ public class User(string username, string? password, UserVerificationStatus stat
     {
         return new User(username, password, UserVerificationStatus.Unverified);
     }
-}
 
-public enum UserVerificationStatus
-{
-    Unverified = 1,
-    Confirmed
+    public static User Create(string username, string? password, UserVerificationStatus status)
+    {
+        return new User(username, password, status);
+    }
 }

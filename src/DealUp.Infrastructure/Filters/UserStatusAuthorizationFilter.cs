@@ -1,4 +1,4 @@
-﻿using DealUp.Domain.User;
+﻿using DealUp.Domain.User.Values;
 using DealUp.Infrastructure.Requirements;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
