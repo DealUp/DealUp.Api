@@ -6,18 +6,19 @@ namespace DealUp.Domain.Seller;
 
 public class SellerProfile : EntityBase
 {
+    public Guid UserId { get; private set; }
     public UserDomain User { get; private init; } = null!;
 
     private readonly List<AdvertisementDomain> _advertisements = [];
     public IReadOnlyCollection<AdvertisementDomain> Advertisements => _advertisements.AsReadOnly();
 
-    private SellerProfile()
+    private SellerProfile(Guid userId)
     {
-        
+        UserId = userId;
     }
 
-    public static SellerProfile CreateNew(UserDomain user)
+    public static SellerProfile CreateNew(Guid userId)
     {
-        return new SellerProfile { User = user };
+        return new SellerProfile(userId);
     }
 }

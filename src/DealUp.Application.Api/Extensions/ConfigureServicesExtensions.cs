@@ -1,12 +1,15 @@
+using DealUp.Database.Repositories.Seller;
 using DealUp.Database.Repositories.User;
 using DealUp.Domain.Email.Interfaces;
 using DealUp.Domain.Identity.Interfaces;
+using DealUp.Domain.Seller.Interfaces;
 using DealUp.Domain.User.Interfaces;
 using DealUp.EmailSender.Extensions;
 using DealUp.Infrastructure.Handlers;
 using DealUp.Services.Email;
 using DealUp.Services.Identity;
 using DealUp.Services.Identity.SsoProviders;
+using DealUp.Services.Seller;
 using DealUp.Services.User;
 using Microsoft.AspNetCore.Authorization;
 
@@ -19,7 +22,8 @@ public static class ConfigureServicesExtensions
         return serviceCollection
             .AddIdentityServices()
             .AddUserServices()
-            .AddEmailSendingServices(configuration);
+            .AddEmailSendingServices(configuration)
+            .AddSellerServices();
     }
 
     private static IServiceCollection AddIdentityServices(this IServiceCollection serviceCollection)
@@ -51,5 +55,12 @@ public static class ConfigureServicesExtensions
         return serviceCollection
             .AddTransient<IEmailSendingService, EmailSendingService>()
             .AddEmailInfrastructure(configuration);
+    }
+
+    private static IServiceCollection AddSellerServices(this IServiceCollection serviceCollection)
+    {
+        return serviceCollection
+            .AddTransient<ISellerService, SellerService>()
+            .AddTransient<ISellerRepository, SellerRepository>();
     }
 }

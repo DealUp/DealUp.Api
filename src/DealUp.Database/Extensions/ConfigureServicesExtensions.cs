@@ -53,11 +53,11 @@ public static class ConfigureServicesExtensions
 
     private static async Task<SellerProfile> CreateAdminSellerAsync(this DbContext context, User user, CancellationToken cancellationToken)
     {
-        var adminSeller = await context.Set<SellerProfile>().FirstOrDefaultAsync(seller => seller.User.Username == "admin@dealup.com", cancellationToken);
+        var adminSeller = await context.Set<SellerProfile>().FirstOrDefaultAsync(seller => seller.UserId == user.Id, cancellationToken);
 
         if (adminSeller is null)
         {
-            adminSeller = SellerProfile.CreateNew(user);
+            adminSeller = SellerProfile.CreateNew(user.Id);
             await context.AddAsync(adminSeller, cancellationToken);
             await context.SaveChangesAsync(cancellationToken);
         }
