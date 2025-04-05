@@ -27,10 +27,24 @@ public static class ApiReferenceExtensions
             {
                 options
                     .WithTitle($"{ProjectConstants.Name} API Reference")
+                    .WithServers(application.Urls)
                     .WithClientButton(false)
                     .WithDownloadButton(false)
                     .WithPreferredScheme(JwtBearerDefaults.AuthenticationScheme);
             });
         }
+    }
+
+    private static ScalarOptions WithServers(this ScalarOptions options, params ICollection<string> applicationUrls)
+    {
+        options.Servers = [];
+
+        foreach (var applicationUrl in applicationUrls)
+        {
+            var uriBuilder = new UriBuilder(applicationUrl);
+            options.AddServer($"{uriBuilder.Scheme}://localhost:{uriBuilder.Port}");
+        }
+
+        return options;
     }
 }
