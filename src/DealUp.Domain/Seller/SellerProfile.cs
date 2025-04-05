@@ -4,7 +4,7 @@ using UserDomain = DealUp.Domain.User.User;
 
 namespace DealUp.Domain.Seller;
 
-public class SellerProfile : EntityBase
+public class SellerProfile : AuditableEntityBase
 {
     public Guid UserId { get; private set; }
     public UserDomain User { get; private init; } = null!;

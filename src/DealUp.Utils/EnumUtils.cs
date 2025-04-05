@@ -6,7 +6,7 @@ public static class EnumUtils
     {
         if (!Enum.TryParse(typeof(T), enumString, ignoreCase: ignoreCase, out object? result))
         {
-            throw new Exception($"{enumString} can't parse to {typeof(T)}");
+            throw new ArgumentException($"{enumString} cannot be parsed to {typeof(T)} enum.", nameof(enumString));
         }
         return (T)result;
     }

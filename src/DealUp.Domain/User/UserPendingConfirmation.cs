@@ -3,7 +3,7 @@ using DealUp.Domain.User.Values;
 
 namespace DealUp.Domain.User;
 
-public class UserPendingConfirmation : EntityBase
+public class UserPendingConfirmation : AuditableEntityBase
 {
     public User User { get; private init; } = null!;
     public ConfirmationType Type { get; private set; }

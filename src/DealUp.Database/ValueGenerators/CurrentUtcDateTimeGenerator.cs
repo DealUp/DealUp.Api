@@ -5,10 +5,10 @@ namespace DealUp.Database.ValueGenerators;
 
 public class CurrentUtcDateTimeGenerator : ValueGenerator<DateTime>
 {
+    public override bool GeneratesTemporaryValues => false;
+
     public override DateTime Next(EntityEntry entry)
     {
         return DateTime.UtcNow;
     }
-
-    public override bool GeneratesTemporaryValues => false;
 }

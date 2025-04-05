@@ -33,4 +33,14 @@ public class PostgresqlContext(DbContextOptions<PostgresqlContext> options) : Db
     {
         return base.AddAsync(entity, cancellationToken);
     }
+
+    public Task AddRangeAsync<TEntity>(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default) where TEntity : EntityBase
+    {
+        return base.AddRangeAsync(entities, cancellationToken);
+    }
+
+    public ValueTask<EntityEntry<TEntity>> UpdateAsync<TEntity>(TEntity entity) where TEntity : EntityBase
+    {
+        return ValueTask.FromResult(base.Update(entity));
+    }
 }

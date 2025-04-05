@@ -5,15 +5,11 @@ namespace DealUp.Domain.Advertisement;
 
 public class Label : EntityBase
 {
-    private readonly List<Advertisement> _advertisements = [];
-    private readonly List<Product> _products = [];
-
     public string Name { get; private set; }
     public string ValueType { get; private set; }
     public JsonDocument Value { get; private set; }
-
-    public IReadOnlyCollection<Advertisement> Advertisements => _advertisements.AsReadOnly();
-    public IReadOnlyCollection<Product> Products => _products.AsReadOnly();
+    public Advertisement? Advertisement { get; private init; }
+    public Product? Product { get; private init; }
 
     private Label(string name, string valueType, JsonDocument value)
     {
@@ -22,7 +18,7 @@ public class Label : EntityBase
         Value = value;
     }
 
-    public TValue GetLabelValue<TValue>()
+    public TValue GetValue<TValue>()
     {
         var targetType = Type.GetType(ValueType);
 
@@ -31,13 +27,18 @@ public class Label : EntityBase
             throw new InvalidOperationException($"Type {ValueType} is not supported.");
         }
 
-        var typedValue = Value.Deserialize(targetType)!;
-        return (TValue)typedValue;
+        return Value.Deserialize<TValue>()!;
     }
 
-    public static Label Create(string name, object value)
+    public void SetValue(Label otherLabel)
     {
-        var valueType = value.GetType().FullName!;
+        ValueType = otherLabel.ValueType;
+        Value = otherLabel.Value;
+    }
+
+    public static Label Create<TValue>(string name, TValue value)
+    {
+        var valueType = typeof(TValue).FullName!;
         var serializedValue = JsonSerializer.SerializeToDocument(value);
         return new Label(name, valueType, serializedValue);
     }

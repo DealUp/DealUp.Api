@@ -1,6 +1,7 @@
 ﻿using DealUp.Domain.Email;
 using DealUp.Domain.Email.Interfaces;
 using DealUp.Domain.User;
+using DealUp.EmailSender.Configuration;
 using DealUp.EmailSender.Interfaces;
 using DealUp.Infrastructure.Configuration;
 using Microsoft.Extensions.Options;

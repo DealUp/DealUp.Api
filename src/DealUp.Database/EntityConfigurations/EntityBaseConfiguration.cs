@@ -1,4 +1,3 @@
-using DealUp.Database.ValueGenerators;
 using DealUp.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,14 +12,6 @@ public class EntityBaseConfiguration : IEntityTypeConfiguration<EntityBase>
 
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
-
-        builder.Property(x => x.CreatedAt)
-            .ValueGeneratedOnAdd()
-            .HasValueGenerator<CurrentUtcDateTimeGenerator>();
-
-        builder.Property(x => x.ModifiedAt)
-            .ValueGeneratedOnUpdate()
-            .HasValueGenerator<CurrentUtcDateTimeGenerator>();
 
         builder.HasKey(x => x.Id);
     }

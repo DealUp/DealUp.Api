@@ -15,7 +15,7 @@ public static class AuthExtensions
     {
         builder.Services
             .AddJwtOptions(builder.Configuration)
-            .AddOauthOptions(builder.Configuration)
+            .AddOAuthOptions(builder.Configuration)
             .AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -25,7 +25,7 @@ public static class AuthExtensions
             .AddCookie()
             .AddGoogle(options =>
             {
-                var googleOptions = builder.Configuration.GetOauthOptionsSection().Get<OauthOptions>()!.GoogleProviderOptions;
+                var googleOptions = builder.Configuration.GetOAuthOptionsSection().Get<OAuthOptions>()!.GoogleProviderOptions;
 
                 options.ClientId = googleOptions.ClientId;
                 options.ClientSecret = googleOptions.ClientSecret;
@@ -61,9 +61,9 @@ public static class AuthExtensions
         return serviceCollection.Configure<JwtOptions>(configuration.GetJwtOptionsSection());
     }
 
-    public static IServiceCollection AddOauthOptions(this IServiceCollection serviceCollection, IConfiguration configuration)
+    public static IServiceCollection AddOAuthOptions(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
-        return serviceCollection.Configure<OauthOptions>(configuration.GetOauthOptionsSection());
+        return serviceCollection.Configure<OAuthOptions>(configuration.GetOAuthOptionsSection());
     }
 
     public static IConfigurationSection GetJwtOptionsSection(this IConfiguration configuration)
@@ -71,8 +71,8 @@ public static class AuthExtensions
         return configuration.GetRequiredSection(JwtOptions.SectionName);
     }
 
-    public static IConfigurationSection GetOauthOptionsSection(this IConfiguration configuration)
+    public static IConfigurationSection GetOAuthOptionsSection(this IConfiguration configuration)
     {
-        return configuration.GetRequiredSection(OauthOptions.SectionName);
+        return configuration.GetRequiredSection(OAuthOptions.SectionName);
     }
 }

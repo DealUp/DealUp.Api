@@ -1,8 +1,8 @@
-﻿namespace DealUp.Infrastructure.Configuration;
+﻿namespace DealUp.EmailSender.Configuration;
 
 public class EmailSendingOptions
 {
-    public const string SectionName = "EmailSendingOptions";
+    internal const string SectionName = "EmailSendingOptions";
 
     public bool IsEnabled { get; set; }
     public int SecureTokenLength { get; set; } = 64;

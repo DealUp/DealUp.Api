@@ -1,8 +1,8 @@
 ﻿namespace DealUp.Infrastructure.Configuration;
 
-public class OauthOptions
+public class OAuthOptions
 {
-    public const string SectionName = "OauthOptions";
+    public const string SectionName = "OAuthOptions";
 
     public GoogleProviderOptions GoogleProviderOptions { get; set; } = null!;
 }

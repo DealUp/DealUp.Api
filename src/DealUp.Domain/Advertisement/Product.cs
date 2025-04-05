@@ -2,7 +2,7 @@
 
 namespace DealUp.Domain.Advertisement;
 
-public class Product : EntityBase
+public class Product : AuditableEntityBase
 {
     private readonly List<Label> _labels = [];
 
@@ -19,25 +19,6 @@ public class Product : EntityBase
     {
         Title = title;
         Description = description;
-    }
-
-    public void AddLabel(Label label)
-    {
-        var existingLabel = _labels.FirstOrDefault(l => l.Name == label.Name);
-        if (existingLabel is not null)
-        {
-            _labels.Remove(existingLabel);
-        }
-        _labels.Add(label);
-    }
-
-    public void RemoveLabel(string labelName)
-    {
-        var label = _labels.FirstOrDefault(l => l.Name == labelName);
-        if (label is not null)
-        {
-            _labels.Remove(label);
-        }
     }
 
     public static Product Create(string title, string description)

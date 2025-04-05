@@ -1,12 +1,13 @@
 ﻿using DealUp.Domain.Abstractions;
 using DealUp.Domain.Advertisement.Values;
+using DealUp.Domain.Media;
 using DealUp.Domain.Seller;
 
 namespace DealUp.Domain.Advertisement;
 
-public class Advertisement : EntityBase
+public class Advertisement : AuditableEntityBase
 {
-    private readonly List<AdvertisementPhoto> _photos = [];
+    private readonly List<MediaEntity> _media = [];
     private readonly List<Label> _labels = [];
     private readonly List<Tag> _tags = [];
 
@@ -16,10 +17,10 @@ public class Advertisement : EntityBase
     public Location Location { get; private init; } = null!;
     public AttendanceStatistics Statistics { get; private init; } = null!;
 
-    public IReadOnlyCollection<AdvertisementPhoto> Photos
+    public IReadOnlyCollection<MediaEntity> Media
     {
-        get => _photos.AsReadOnly();
-        private init => _photos = value.ToList();
+        get => _media.AsReadOnly();
+        private init => _media = value.ToList();
     }
 
     public IReadOnlyCollection<Label> Labels
@@ -39,20 +40,41 @@ public class Advertisement : EntityBase
         Status = status;
     }
 
-    public void AddTag(Tag tag)
+    public MediaEntity? GetFirstMedia()
     {
-        if (!_tags.Contains(tag))
+        return Media.FirstOrDefault();
+    }
+
+    public decimal GetPrice()
+    {
+        var priceLabel = _labels.Single(label => label.Name == "price"); // TODO: store default label names?
+        return priceLabel.GetValue<decimal>();
+    }
+
+    public List<string> ExtractTagValues()
+    {
+        return _tags.Select(tag => tag.Value).ToList();
+    }
+
+    public void AddAdditionalLabels(params List<Label> labels)
+    {
+        foreach (var label in labels)
         {
-            _tags.Add(tag);
+            AddOrUpdateLabel(label);
         }
     }
 
-    public void RemoveTag(string tagName)
+    public void AddOrUpdateLabel(Label label)
     {
-        var tag = _tags.FirstOrDefault(t => t.Value == tagName);
-        if (tag is not null)
+        var existingLabel = _labels.FirstOrDefault(existingLabel => existingLabel.Name == label.Name);
+
+        if (existingLabel is null)
         {
-            _tags.Remove(tag);
+            _labels.Add(label);
+        }
+        else
+        {
+            existingLabel.SetValue(label);
         }
     }
 
@@ -60,7 +82,8 @@ public class Advertisement : EntityBase
         SellerProfile seller,
         Product product,
         Location location,
-        List<AdvertisementPhoto> photos,
+        List<MediaEntity> mediaFiles,
+        List<Label> labels,
         List<Tag> tags)
     {
         return new Advertisement(AdvertisementStatus.Active)
@@ -68,7 +91,8 @@ public class Advertisement : EntityBase
             Seller = seller,
             Product = product,
             Location = location,
-            Photos = photos,
+            Media = mediaFiles,
+            Labels = labels,
             Tags = tags,
             Statistics = AttendanceStatistics.CreateNew()
         };

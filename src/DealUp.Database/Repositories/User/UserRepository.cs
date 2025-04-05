@@ -1,4 +1,5 @@
-﻿using DealUp.Domain.User;
+﻿using DealUp.Database.Interfaces;
+using DealUp.Domain.User;
 using DealUp.Domain.User.Interfaces;
 using DealUp.Domain.User.Values;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,7 @@ using UserDomain = DealUp.Domain.User.User;
 
 namespace DealUp.Database.Repositories.User;
 
-public class UserRepository(PostgresqlContext databaseContext) : IUserRepository
+public class UserRepository(IDatabaseContext databaseContext) : IUserRepository
 {
     public async Task<UserDomain?> GetUserByIdAsync(Guid userId)
     {
@@ -43,7 +44,7 @@ public class UserRepository(PostgresqlContext databaseContext) : IUserRepository
 
     public async Task<Guid> UpdatePendingConfirmationAsync(UserPendingConfirmation confirmation)
     {
-        databaseContext.Update(confirmation);
+        await databaseContext.UpdateAsync(confirmation);
         await databaseContext.SaveChangesAsync();
         return confirmation.Id;
     }

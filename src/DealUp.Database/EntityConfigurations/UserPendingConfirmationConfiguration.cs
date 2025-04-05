@@ -10,7 +10,6 @@ public class UserPendingConfirmationConfiguration : IEntityTypeConfiguration<Use
     {
         builder.Property(x => x.Token);
         builder.Property(x => x.IsUsed);
-
         builder.Property(x => x.Type)
             .HasConversion<string>();
 

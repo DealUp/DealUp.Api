@@ -4,10 +4,8 @@ namespace DealUp.Domain.Advertisement;
 
 public class Tag : EntityBase
 {
-    private readonly List<Advertisement> _advertisements = [];
-
     public string Value { get; private set; }
-    public IReadOnlyCollection<Advertisement> Advertisements => _advertisements.AsReadOnly();
+    public Advertisement Advertisement { get; private init; } = null!;
 
     private Tag(string value)
     {

@@ -37,15 +37,14 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
 app.MapGet("/health", context => context.Response.WriteAsync("Alive!"));
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
     await app.ExecuteMigrationsAsync();
 }
 

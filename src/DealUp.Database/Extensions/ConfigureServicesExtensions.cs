@@ -3,6 +3,7 @@ using DealUp.Constants;
 using DealUp.Database.Interfaces;
 using DealUp.Domain.Advertisement;
 using DealUp.Domain.Advertisement.Values;
+using DealUp.Domain.Media;
 using DealUp.Domain.Seller;
 using DealUp.Domain.User;
 using DealUp.Domain.User.Values;
@@ -18,13 +19,15 @@ public static class ConfigureServicesExtensions
 {
     public static IServiceCollection AddPostgresqlDatabase(this IHostApplicationBuilder builder)
     {
-        return builder.Services.AddDbContext<IDatabaseContext, PostgresqlContext>(options =>
+        return builder.Services.AddDbContext<IDatabaseContext, PostgresqlContext>(contextOptions =>
         {
-            options.UseNpgsql(builder.Configuration.GetConnectionString(ConfigurationConstants.DatabaseSectionName));
+            contextOptions.UseNpgsql(
+                builder.Configuration.GetConnectionString(ConfigurationConstants.DatabaseSectionName),
+                options => options.UseNetTopologySuite());
 
             if (builder.Environment.IsDevelopment())
             {
-                options
+                contextOptions
                     .EnableSensitiveDataLogging()
                     .UseAsyncSeeding(async (context, _, cancellationToken) =>
                     {
@@ -99,12 +102,13 @@ public static class ConfigureServicesExtensions
         await context.Set<Advertisement>().ExecuteDeleteAsync(cancellationToken);
 
         var product = Product.Create("iPhone 11 Pro", "Not new");
-        var location = Location.Create(50.4504m, 30.5245m);
+        var location = Location.Create(50.4504d, 30.5245d);
 
-        List<AdvertisementPhoto> advertisementPhotos = [AdvertisementPhoto.CreateFromUrl("https://localhost:8080/api/v1/photos/icon.png")];
+        List<MediaEntity> mediaFiles = [MediaEntity.CreateFromKey("uploads/icon.png", MediaType.Picture)];
+        List<Label> labels = [Label.Create("price", 199.99m)];
         List<Tag> tags = [Tag.Create("30-day return policy")];
 
-        var advertisement = Advertisement.CreateNew(seller, product, location, advertisementPhotos, tags);
+        var advertisement = Advertisement.CreateNew(seller, product, location, mediaFiles, labels, tags);
         await context.AddAsync(advertisement, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
 
