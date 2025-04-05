@@ -6,7 +6,7 @@ using DealUp.Infrastructure.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().SetCamelCaseResponse();
-builder.Services.AddSwagger();
+builder.Services.AddApiReference();
 builder.Services.ConfigureServices(builder.Configuration);
 builder.AddPostgresqlDatabase();
 
@@ -39,12 +39,10 @@ app.UseAuthorization();
 
 app.MapGet("/health", context => context.Response.WriteAsync("Alive!"));
 app.MapControllers();
+app.UseApiReferenceIfDevelopment();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
     await app.ExecuteMigrationsAsync();
 }
 
