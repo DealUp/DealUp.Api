@@ -13,8 +13,8 @@ public static class ConfigureServicesExtensions
     {
         return serviceCollection
             .Configure<EmailSendingOptions>(configuration.GetSection(EmailSendingOptions.SectionName))
-            .AddScoped<IEmailSenderFactory, EmailSenderFactory>()
-            .AddScoped<IEmailSender, ResendEmailSender>()
+            .AddTransient<IEmailSenderFactory, EmailSenderFactory>()
+            .AddTransient<IEmailSender, ResendEmailSender>()
             .AddResendClient(configuration);
     }
 

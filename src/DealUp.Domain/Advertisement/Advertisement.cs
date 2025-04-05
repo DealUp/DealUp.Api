@@ -1,12 +1,13 @@
 ﻿using DealUp.Domain.Abstractions;
 using DealUp.Domain.Advertisement.Values;
+using DealUp.Domain.Media;
 using DealUp.Domain.Seller;
 
 namespace DealUp.Domain.Advertisement;
 
 public class Advertisement : AuditableEntityBase
 {
-    private readonly List<AdvertisementMedia> _mediaFiles = [];
+    private readonly List<MediaEntity> _media = [];
     private readonly List<Label> _labels = [];
     private readonly List<Tag> _tags = [];
 
@@ -16,10 +17,10 @@ public class Advertisement : AuditableEntityBase
     public Location Location { get; private init; } = null!;
     public AttendanceStatistics Statistics { get; private init; } = null!;
 
-    public IReadOnlyCollection<AdvertisementMedia> MediaFiles
+    public IReadOnlyCollection<MediaEntity> Media
     {
-        get => _mediaFiles.AsReadOnly();
-        private init => _mediaFiles = value.ToList();
+        get => _media.AsReadOnly();
+        private init => _media = value.ToList();
     }
 
     public IReadOnlyCollection<Label> Labels
@@ -39,15 +40,15 @@ public class Advertisement : AuditableEntityBase
         Status = status;
     }
 
-    public AdvertisementMedia? GetFirstMedia()
+    public MediaEntity? GetFirstMedia()
     {
-        return MediaFiles.FirstOrDefault();
+        return Media.FirstOrDefault();
     }
 
     public decimal GetPrice()
     {
         var priceLabel = _labels.Single(label => label.Name == "price"); // TODO: store default label names?
-        return priceLabel.GetLabelValue<decimal>();
+        return priceLabel.GetValue<decimal>();
     }
 
     public List<string> ExtractTagValues()
@@ -55,11 +56,33 @@ public class Advertisement : AuditableEntityBase
         return _tags.Select(tag => tag.Value).ToList();
     }
 
+    public void AddAdditionalLabels(params List<Label> labels)
+    {
+        foreach (var label in labels)
+        {
+            AddOrUpdateLabel(label);
+        }
+    }
+
+    public void AddOrUpdateLabel(Label label)
+    {
+        var existingLabel = _labels.FirstOrDefault(existingLabel => existingLabel.Name == label.Name);
+
+        if (existingLabel is null)
+        {
+            _labels.Add(label);
+        }
+        else
+        {
+            existingLabel.SetValue(label);
+        }
+    }
+
     public static Advertisement CreateNew(
         SellerProfile seller,
         Product product,
         Location location,
-        List<AdvertisementMedia> mediaFiles,
+        List<MediaEntity> mediaFiles,
         List<Label> labels,
         List<Tag> tags)
     {
@@ -68,7 +91,7 @@ public class Advertisement : AuditableEntityBase
             Seller = seller,
             Product = product,
             Location = location,
-            MediaFiles = mediaFiles,
+            Media = mediaFiles,
             Labels = labels,
             Tags = tags,
             Statistics = AttendanceStatistics.CreateNew()

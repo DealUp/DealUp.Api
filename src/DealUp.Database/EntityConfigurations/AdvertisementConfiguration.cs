@@ -24,15 +24,18 @@ public class AdvertisementConfiguration : IEntityTypeConfiguration<Advertisement
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
-        builder.HasMany(x => x.MediaFiles)
+        builder.HasMany(x => x.Media)
             .WithOne()
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();
 
         builder.HasMany(x => x.Labels)
-            .WithMany(x => x.Advertisements);
+            .WithOne(x => x.Advertisement)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(x => x.Tags)
-            .WithMany(x => x.Advertisements);
+            .WithOne(x => x.Advertisement)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
     }
 }

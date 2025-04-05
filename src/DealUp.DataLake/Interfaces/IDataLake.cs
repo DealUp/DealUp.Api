@@ -7,13 +7,12 @@ public interface IDataLake
     private const string MediaUploadPath = "uploads";
     private const char PathSeparator = '/';
 
-    public CreatePreSignedPostResponse GeneratePreSignedPost(string filePath, string fileName);
-    public Task<string> GeneratePreSignedGet(string objectKey);
-    public Task<List<string>> GetKeysByPrefixAsync(string prefix);
+    public Task<List<string>> GetKeysByPrefixAsync(string searchPrefix);
+    public Task<string> GeneratePreSignedGetAsync(string objectKey);
+    public Task<CreatePreSignedPostResponse> GeneratePreSignedPostAsync(string filePath);
 
-    public static string CombinePath(params string[] paths)
+    internal static string CombinePaths(params string[] paths)
     {
-        paths = [MediaUploadPath, ..paths];
-        return Path.Combine(paths).Replace('\\', PathSeparator);
+        return Path.Combine([MediaUploadPath, ..paths]).Replace('\\', PathSeparator);
     }
 }

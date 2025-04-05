@@ -2,6 +2,7 @@
 
 public record CreateAdvertisementDto
 {
+    public Guid SessionId { get; private set; }
     public required string Title { get; set; }
     public required string Description { get; set; }
     public required decimal Price { get; set; }

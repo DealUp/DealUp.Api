@@ -3,6 +3,7 @@ using DealUp.Constants;
 using DealUp.Database.Interfaces;
 using DealUp.Domain.Advertisement;
 using DealUp.Domain.Advertisement.Values;
+using DealUp.Domain.Media;
 using DealUp.Domain.Seller;
 using DealUp.Domain.User;
 using DealUp.Domain.User.Values;
@@ -103,7 +104,7 @@ public static class ConfigureServicesExtensions
         var product = Product.Create("iPhone 11 Pro", "Not new");
         var location = Location.Create(50.4504d, 30.5245d);
 
-        List<AdvertisementMedia> mediaFiles = [AdvertisementMedia.CreateFromKey("uploads/icon.png", MediaType.Picture)];
+        List<MediaEntity> mediaFiles = [MediaEntity.CreateFromKey("uploads/icon.png", MediaType.Picture)];
         List<Label> labels = [Label.Create("price", 199.99m)];
         List<Tag> tags = [Tag.Create("30-day return policy")];
 

@@ -19,7 +19,7 @@ public static class Converter
             Id = advertisement.Id,
             ProductName = advertisement.Product.Title,
             Price = advertisement.GetPrice(),
-            CoverMediaKey = advertisement.GetFirstMedia()?.Key,
+            PreviewMediaKey = advertisement.GetFirstMedia()?.Key,
             CreationDate = advertisement.CreatedAt,
             Tags = advertisement.ExtractTagValues()
         };
@@ -32,6 +32,6 @@ public static class Converter
         var labels = createAdvertisement.Labels.Select(label => Label.Create(label.Name, label.Value)).ToList();
         var tags = createAdvertisement.Tags.Select(Tag.Create).ToList();
 
-        return CreateAdvertisementRequest.Create(product, location, labels, tags);
+        return CreateAdvertisementRequest.Create(createAdvertisement.SessionId, createAdvertisement.Price, product, location, labels, tags);
     }
 }

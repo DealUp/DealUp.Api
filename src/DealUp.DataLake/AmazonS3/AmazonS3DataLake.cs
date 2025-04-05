@@ -12,20 +12,19 @@ public class AmazonS3DataLake(IAmazonS3ExtendedClient s3Client, IOptions<DataLak
 {
     private readonly AmazonS3Options _amazonOptions = options.Value.AmazonS3Options!;
 
-    public CreatePreSignedPostResponse GeneratePreSignedPost(string filePath, string fileName)
+    public async Task<List<string>> GetKeysByPrefixAsync(string searchPrefix)
     {
-        var request = new CreatePreSignedPostRequest
+        var request = new ListObjectsV2Request
         {
             BucketName = _amazonOptions.BucketName,
-            Key = IDataLake.CombinePath(filePath, fileName),
-            Expires = TimeSpan.FromSeconds(5),
-            MaxFileSizeInBytes = options.Value.MaxFileSizeInBytes
+            Prefix = IDataLake.CombinePaths(searchPrefix)
         };
 
-        return s3Client.CreatePreSignedPost(request);
+        var response = await s3Client.ListObjectsV2Async(request);
+        return response.S3Objects.Select(s3Object => s3Object.Key).ToList();
     }
 
-    public Task<string> GeneratePreSignedGet(string objectKey)
+    public Task<string> GeneratePreSignedGetAsync(string objectKey)
     {
         var request = new GetPreSignedUrlRequest
         {
@@ -38,15 +37,17 @@ public class AmazonS3DataLake(IAmazonS3ExtendedClient s3Client, IOptions<DataLak
         return s3Client.GetPreSignedURLAsync(request);
     }
 
-    public async Task<List<string>> GetKeysByPrefixAsync(string prefix)
+    public Task<CreatePreSignedPostResponse> GeneratePreSignedPostAsync(string filePath)
     {
-        var request = new ListObjectsV2Request
+        var fileName = Path.GetRandomFileName();
+        var request = new CreatePreSignedPostRequest
         {
             BucketName = _amazonOptions.BucketName,
-            Prefix = IDataLake.CombinePath(prefix)
+            Key = IDataLake.CombinePaths(filePath, fileName),
+            Expires = TimeSpan.FromSeconds(5),
+            MaxFileSizeInBytes = options.Value.MaxFileSizeInBytes
         };
 
-        var response = await s3Client.ListObjectsV2Async(request);
-        return response.S3Objects.Select(s3Object => s3Object.Key).ToList();
+        return Task.FromResult(s3Client.CreatePreSignedPost(request));
     }
 }

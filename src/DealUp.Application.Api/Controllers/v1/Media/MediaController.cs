@@ -12,16 +12,16 @@ namespace DealUp.Application.Api.Controllers.v1.Media;
 public class MediaController(IDataLake dataLake) : ControllerBase
 {
     [HttpGet("{sessionId:guid}")]
-    public ActionResult<CreatePreSignedPostResponse> GeneratePreSignedPost([FromRoute] Guid sessionId, [FromQuery] string fileName)
+    public ActionResult<CreatePreSignedPostResponse> GeneratePreSignedPost([FromRoute] Guid sessionId)
     {
-        var response = dataLake.GeneratePreSignedPost(sessionId.ToString(), fileName);
+        var response = dataLake.GeneratePreSignedPostAsync(sessionId.ToString());
         return Ok(response);
     }
 
     [HttpGet("{mediaKey:required}")]
     public async Task<ActionResult<string>> GeneratePreSignedGet([FromRoute] string mediaKey)
     {
-        var mediaUrl = await dataLake.GeneratePreSignedGet(Uri.UnescapeDataString(mediaKey));
+        var mediaUrl = await dataLake.GeneratePreSignedGetAsync(Uri.UnescapeDataString(mediaKey));
         return Redirect(mediaUrl);
     }
 }

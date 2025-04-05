@@ -5,5 +5,5 @@ namespace DealUp.Domain.Advertisement.Interfaces;
 public interface IAdvertisementService
 {
     public Task<PagedResponse<Advertisement>> GetAllAdvertisementsAsync(PaginationParameters pagination);
-    public Task<Advertisement> CreateAdvertisementAsync(Guid userId, Guid sessionId, CreateAdvertisementRequest creationRequest);
+    public Task<Advertisement> CreateAdvertisementAsync(Guid userId, CreateAdvertisementRequest creationRequest);
 }

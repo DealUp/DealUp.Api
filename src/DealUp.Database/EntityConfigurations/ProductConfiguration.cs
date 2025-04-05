@@ -12,6 +12,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Description);
 
         builder.HasMany(x => x.Labels)
-            .WithMany(x => x.Products);
+            .WithOne(x => x.Product);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using DealUp.Database.Extensions;
 using DealUp.Database.Interfaces;
-using DealUp.Domain.Advertisement;
 using DealUp.Domain.Advertisement.Interfaces;
 using DealUp.Domain.Common;
 using Microsoft.EntityFrameworkCore;
@@ -31,20 +30,5 @@ public class AdvertisementRepository(IDatabaseContext databaseContext) : IAdvert
         var totalCount = await futureCount.ValueAsync();
 
         return PagedResponse<AdvertisementDomain>.Create(advertisements, pagination, totalCount);
-    }
-
-    public async Task<List<Label>> GetExistingLabelsAsync(List<Label> labelsToCheck)
-    {
-        return await databaseContext.Set<Label>()
-            .Where(existingLabel => labelsToCheck.Select(label => label.Name).Contains(existingLabel.Name))
-            .Where(existingLabel => labelsToCheck.Select(label => label.Value).Contains(existingLabel.Value))
-            .ToListAsync();
-    }
-
-    public async Task<List<Tag>> GetExistingTagsAsync(List<Tag> tagsToCheck)
-    {
-        return await databaseContext.Set<Tag>()
-            .Where(existingTag => tagsToCheck.Select(tag => tag.Value).Contains(existingTag.Value))
-            .ToListAsync();
     }
 }

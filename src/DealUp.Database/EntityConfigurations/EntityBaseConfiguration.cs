@@ -1,4 +1,3 @@
-using DealUp.Database.ValueGenerators;
 using DealUp.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -12,8 +11,7 @@ public class EntityBaseConfiguration : IEntityTypeConfiguration<EntityBase>
         builder.UseTpcMappingStrategy();
 
         builder.Property(x => x.Id)
-            .ValueGeneratedOnAdd()
-            .HasValueGenerator<GuidVersion7Generator>();
+            .ValueGeneratedOnAdd();
 
         builder.HasKey(x => x.Id);
     }

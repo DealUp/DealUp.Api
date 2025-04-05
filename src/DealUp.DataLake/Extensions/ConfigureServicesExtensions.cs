@@ -14,8 +14,8 @@ public static class ConfigureServicesExtensions
     {
         return serviceCollection
             .Configure<DataLakeOptions>(configuration.GetSection(DataLakeOptions.SectionName))
-            .AddScoped<IDataLakeFactory, DataLakeFactory>()
-            .AddScoped<IDataLake>(serviceProvider =>
+            .AddTransient<IDataLakeFactory, DataLakeFactory>()
+            .AddTransient<IDataLake>(serviceProvider =>
             {
                 var dataLakeFactory = serviceProvider.GetRequiredService<IDataLakeFactory>();
                 var options = serviceProvider.GetRequiredService<IOptions<DataLakeOptions>>();

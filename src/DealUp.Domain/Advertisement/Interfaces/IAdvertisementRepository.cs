@@ -6,6 +6,4 @@ public interface IAdvertisementRepository
 {
     public Task<Advertisement> CreateAdvertisementAsync(Advertisement advertisement);
     public Task<PagedResponse<Advertisement>> GetAllAdvertisementsAsync(PaginationParameters pagination);
-    public Task<List<Label>> GetExistingLabelsAsync(List<Label> labelsToCheck);
-    public Task<List<Tag>> GetExistingTagsAsync(List<Tag> tagsToCheck);
 }
