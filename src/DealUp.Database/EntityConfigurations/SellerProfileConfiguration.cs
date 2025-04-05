@@ -9,7 +9,7 @@ public class SellerProfileConfiguration : IEntityTypeConfiguration<SellerProfile
     public void Configure(EntityTypeBuilder<SellerProfile> builder)
     {
         builder.HasOne(x => x.User)
-            .WithOne()
+            .WithOne(x => x.SellerProfile)
             .HasForeignKey<SellerProfile>()
             .OnDelete(DeleteBehavior.Cascade)
             .IsRequired();

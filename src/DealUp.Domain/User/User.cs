@@ -1,5 +1,6 @@
 using DealUp.Domain.Abstractions;
 using DealUp.Domain.Identity;
+using DealUp.Domain.Seller;
 using DealUp.Domain.User.Values;
 
 namespace DealUp.Domain.User;
@@ -9,6 +10,7 @@ public class User : AuditableEntityBase
     public string Username { get; private set; }
     public string? Password { get; private set; }
     public UserVerificationStatus Status { get; private set; }
+    public SellerProfile? SellerProfile { get; private init; }
 
     private User(string username, string? password, UserVerificationStatus status)
     {
@@ -25,6 +27,11 @@ public class User : AuditableEntityBase
     public void Confirm()
     {
         Status = UserVerificationStatus.Confirmed;
+    }
+
+    public bool HasSellerProfile()
+    {
+        return SellerProfile is not null;
     }
 
     public static User CreateNew(string username, string? password)

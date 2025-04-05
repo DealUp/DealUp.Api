@@ -1,4 +1,5 @@
 ﻿using DealUp.Domain.User;
+using DealUp.Domain.User.Values;
 using DealUp.Dto.v1.User;
 
 namespace DealUp.Application.Api.Controllers.v1.User;
@@ -11,6 +12,16 @@ public static class Converter
         {
             Success = verificationResponse.Success,
             Message = verificationResponse.Message
+        };
+    }
+
+    public static UserDetailsDto ToDto(this UserDetails userDetails)
+    {
+        return new UserDetailsDto
+        {
+            Username = userDetails.Username,
+            Status = userDetails.Status,
+            HasSellerProfile = userDetails.HasSellerProfile
         };
     }
 }

@@ -4,7 +4,6 @@ using DealUp.Domain.User.Interfaces;
 using DealUp.Domain.User.Values;
 using DealUp.EmailSender.Configuration;
 using DealUp.Exceptions;
-using DealUp.Infrastructure.Configuration;
 using DealUp.Utils;
 using Microsoft.Extensions.Options;
 
@@ -44,6 +43,12 @@ public class UserService(IUserRepository userRepository, IEmailSendingService em
 
         pendingConfirmation.ConfirmUser();
         await userRepository.UpdatePendingConfirmationAsync(pendingConfirmation);
+    }
+
+    public async Task<UserDetails> GetUserDetailsAsync(Guid userId)
+    {
+        var existingUser = await userRepository.GetUserByIdAsync(userId);
+        return UserDetails.Create(existingUser!);
     }
 
     private async Task SendEmailVerificationRequestAsync(Guid userId)
