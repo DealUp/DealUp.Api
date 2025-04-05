@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace DealUp.Application.Api.Controllers.v1.User;
 
 [ApiController]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 [Route("api/v1/user")]
 public class UserController(IHttpContextService httpContextService, IUserService userService) : ControllerBase
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [AuthorizeFor(UserVerificationStatus.Unverified)]
     [HttpGet("start-email-verification")]
     public async Task<ActionResult<StartVerificationResponseDto>> StartEmailVerification()
@@ -30,5 +30,13 @@ public class UserController(IHttpContextService httpContextService, IUserService
     {
         await userService.VerifyUserAsync(FinishVerificationRequest.Create(userId, token));
         return Ok();
+    }
+
+    [HttpGet("me")]
+    public async Task<ActionResult<UserDetailsDto>> GetUserDetails()
+    {
+        var userId = httpContextService.GetUserIdOrThrow();
+        var userDetails = await userService.GetUserDetailsAsync(userId);
+        return Ok(userDetails.ToDto());
     }
 }
