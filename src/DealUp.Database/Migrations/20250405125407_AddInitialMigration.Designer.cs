@@ -5,6 +5,7 @@ using System.Text.Json;
 using DealUp.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -14,9 +15,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DealUp.Database.Migrations
 {
     [DbContext(typeof(PostgresqlContext))]
-    partial class PostgresqlContextModelSnapshot : ModelSnapshot
+    [Migration("20250405125407_AddInitialMigration")]
+    partial class AddInitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,25 +40,6 @@ namespace DealUp.Database.Migrations
                     b.ToTable((string)null);
 
                     b.UseTpcMappingStrategy();
-                });
-
-            modelBuilder.Entity("DealUp.Domain.Advertisement.Values.UniqueLabel", b =>
-                {
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<JsonDocument>("Value")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
-
-                    b.Property<string>("ValueType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("View_UniqueLabel", (string)null);
                 });
 
             modelBuilder.Entity("DealUp.Domain.Abstractions.AuditableEntityBase", b =>

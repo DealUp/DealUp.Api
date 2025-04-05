@@ -15,8 +15,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DealUp.Database.Migrations
 {
     [DbContext(typeof(PostgresqlContext))]
-    [Migration("20250405121819_AddInitialMigration")]
-    partial class AddInitialMigration
+    [Migration("20250405125506_AddLabelView")]
+    partial class AddLabelView
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,25 @@ namespace DealUp.Database.Migrations
                     b.ToTable((string)null);
 
                     b.UseTpcMappingStrategy();
+                });
+
+            modelBuilder.Entity("DealUp.Domain.Advertisement.Values.UniqueLabel", b =>
+                {
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<JsonDocument>("Value")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("ValueType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("View_UniqueLabel", (string)null);
                 });
 
             modelBuilder.Entity("DealUp.Domain.Abstractions.AuditableEntityBase", b =>

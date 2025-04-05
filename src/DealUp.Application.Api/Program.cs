@@ -1,6 +1,5 @@
 using DealUp.Application.Api.Extensions;
 using DealUp.Database.Extensions;
-using DealUp.DataLake.Extensions;
 using DealUp.Infrastructure.Extensions;
 using DealUp.Infrastructure.Middlewares;
 
@@ -38,15 +37,14 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseSwagger();
-app.UseSwaggerUI();
-
 app.MapGet("/health", context => context.Response.WriteAsync("Alive!"));
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
     await app.ExecuteMigrationsAsync();
 }
 
